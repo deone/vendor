@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>Spectra Wireless Vendor &mdash; {% block title %}{% endblock %}</title>
+    {% load staticfiles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-default header">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#vendor-navbar-collapse" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <!-- <a class="navbar-brand" href="#">
+            <img alt="Spectra Wireless" src="{#{% static 'images/spectra_logo.png' %}#}">
+            <h1>Voucher Management System</h1>
+          </a> -->
+          <a class="navbar-brand" href="#">Spectra Wireless Vendor</a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="vendor-navbar-collapse">
+        {% block nav_items %}
+        {% endblock %}
+        </div>
+
+      </div>
+    </nav>
+
+    {% block app_body %}
+    {% endblock %}
+
+  </body>
+</html>
