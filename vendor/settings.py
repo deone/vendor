@@ -141,3 +141,6 @@ QUANTITY_CHOICES = (
     (FOUR, '4'),
     (FIVE, '5'),
 )
+
+VMS_URL = "http://localhost:3000/vouchers/"
+VOUCHER_FETCH_URL = VMS_URL + "fetch/"
