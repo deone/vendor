@@ -112,20 +112,6 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
 
-UNIT = 'GHS'
-
-# price choices
-ONE = 1
-TWO = 2
-FIVE = 5
-
-PRICE_CHOICES = (
-    ('', 'Select Price'),
-    (ONE, '1 ' + UNIT),
-    (TWO, '2 ' + UNIT),
-    (FIVE, '5 ' + UNIT),
-)
-
 # quantity choices
 ONE = 1
 TWO = 2
@@ -145,5 +131,7 @@ QUANTITY_CHOICES = (
 VMS_URL = "http://localhost:3000/vouchers/"
 
 VOUCHER_FETCH_URL = VMS_URL + "fetch/"
+
+VOUCHER_VALUES_URL = VMS_URL + "values/"
 
 VOUCHER_DOWNLOAD_PATH = os.path.join(BASE_DIR, 'downloads')

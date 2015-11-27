@@ -22,7 +22,7 @@ def index(request):
             vouchers = response['results']
 
             # Write vouchers to file and return download
-            file_name = 'Voucher_' + timezone.now().strftime('%d-%m-%Y_%I:%M') + '.csv'
+            file_name = 'Vouchers_' + timezone.now().strftime('%d-%m-%Y_%I:%M') + '.csv'
             _file = settings.VOUCHER_DOWNLOAD_PATH + '/' + file_name
 
             f = write_vouchers(vouchers, _file)
