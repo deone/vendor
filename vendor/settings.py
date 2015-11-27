@@ -143,4 +143,7 @@ QUANTITY_CHOICES = (
 )
 
 VMS_URL = "http://localhost:3000/vouchers/"
+
 VOUCHER_FETCH_URL = VMS_URL + "fetch/"
+
+VOUCHER_DOWNLOAD_PATH = os.path.join(BASE_DIR, 'downloads')
