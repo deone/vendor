@@ -5,7 +5,6 @@ def zeropad(num):
     return ('0' * (10 - len(num))) + num
 
 def write_vouchers(voucher_list, _file):
-    print voucher_list
     for v in voucher_list:
         with open(_file, 'a') as f:
             f.write(zeropad(v[0]) + ',' + v[1] + '\n')

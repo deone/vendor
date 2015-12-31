@@ -7,8 +7,8 @@ import requests
 
 def get_price_choices():
     lst = [('', 'Select Price')]
-    prices = requests.get(settings.VOUCHER_VALUES_URL)
-    for p in prices.json()['results']:
+    prices = requests.get(settings.VOUCHER_VALUES_URL).json()
+    for p in prices['results']:
         lst.append((p, str(p) + ' GHS'))
     return lst
 
