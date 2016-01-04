@@ -13,14 +13,10 @@ def file_generator(_file):
             yield line
 
 @login_required
-def index(request, template=None, vend_form=None):
+def index(request, template=None, vend_form=None, prices=None):
     context = {}
     if request.method == 'POST':
-        if vend_form == VendStandardVoucherForm:
-            form = vend_form(request.POST, user=request.user, prices=get_price_choices('STD'))
-        elif vend_form == VendInstantVoucherForm:
-            form = vend_form(request.POST, user=request.user, prices=get_price_choices('INS'))
-
+        form = vend_form(request.POST, user=request.user, prices=prices)
         if form.is_valid():
             response = form.save()
             vouchers = response['results']
@@ -35,10 +31,7 @@ def index(request, template=None, vend_form=None):
             response['Content-Disposition'] = 'attachment; filename="%s"' % file_name
             return response
     else:
-        if vend_form == VendStandardVoucherForm:
-            form = vend_form(prices=get_price_choices('STD'))
-        elif vend_form == VendInstantVoucherForm:
-            form = vend_form(prices=get_price_choices('INS'))
+        form = vend_form(prices=prices)
 
     context.update({'form': form})
     return render(request, template, context)
