@@ -13,12 +13,17 @@ class Common(forms.Form):
         self.fields['value'] = forms.ChoiceField(label='Value', choices=prices, widget=forms.Select(attrs={'class': 'form-control'}))
 
 class VendInstantVoucherForm(Common):
-    pass
+
+    def save(self):
+        url = settings.VOUCHER_FETCH_URL
+        data = {'vendor_id': self.user.pk, 'voucher_type': 'INS'}
+        data.update(self.cleaned_data)
+
+        return send_api_request(url, data)
 
 class VendStandardVoucherForm(Common):
 
     def save(self):
-        print self.cleaned_data
         url = settings.VOUCHER_FETCH_URL
         data = {'vendor_id': self.user.pk, 'voucher_type': 'STD'}
         data.update(self.cleaned_data)
