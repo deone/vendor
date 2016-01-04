@@ -3,22 +3,14 @@ from django.conf import settings
 
 from .helpers import send_api_request
 
-import requests
-
-def get_price_choices():
-    lst = [('', 'Select Price')]
-    prices = requests.get(settings.VOUCHER_VALUES_URL).json()
-    for p in prices['results']:
-        lst.append((p, str(p) + ' GHS'))
-    return lst
-
 class Common(forms.Form):
-    value = forms.ChoiceField(label='Value', choices=get_price_choices(), widget=forms.Select(attrs={'class': 'form-control'}))
     quantity = forms.ChoiceField(label='Quantity', choices=settings.QUANTITY_CHOICES, widget=forms.Select(attrs={'class': 'form-control'}))
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user', None)
+        prices = kwargs.pop('prices', None)
         super(Common, self).__init__(*args, **kwargs)
+        self.fields['value'] = forms.ChoiceField(label='Value', choices=prices, widget=forms.Select(attrs={'class': 'form-control'}))
 
 class VendInstantVoucherForm(Common):
     pass
