@@ -128,6 +128,8 @@ QUANTITY_CHOICES = (
     (FIVE, '5'),
 )
 
+STATIC_ROOT = os.path.join(BASE_DIR, "static_live")
+
 VMS_URL = "http://localhost:3000/vouchers/"
 
 VOUCHER_FETCH_URL = VMS_URL + "fetch/"
