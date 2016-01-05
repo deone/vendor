@@ -2,9 +2,11 @@ from settings import *
 
 DEBUG = TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = ['154.117.8.19']
+IP = '154.117.8.19'
 
-VMS_URL = "http://154.117.8.19:8090/vouchers/"
+ALLOWED_HOSTS = [IP]
+
+VMS_URL = "http://" + IP + ":8090/vouchers/"
 
 VOUCHER_FETCH_URL = VMS_URL + "fetch/"
 
