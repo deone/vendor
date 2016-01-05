@@ -1,12 +1,10 @@
 from settings import *
 
-DEBUG = TEMPLATE_DEBUG = False
+DEBUG = TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = ['154.117.8.18']
+ALLOWED_HOSTS = ['154.117.8.19']
 
-STATIC_URL = "/static/"
-
-VMS_URL = "http://154.117.8.18:8090/vouchers/"
+VMS_URL = "http://154.117.8.19:8090/vouchers/"
 
 VOUCHER_FETCH_URL = VMS_URL + "fetch/"
 
