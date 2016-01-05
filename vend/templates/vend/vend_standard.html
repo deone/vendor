@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Vend Vouchers{% endblock %}
+
+{% block app_body %}
+<div class="row">
+  <form method="post" action="" class="vend-form">
+    <fieldset>
+      <div class="page-header">
+        <h1>Vend Standard Vouchers</h1>
+      </div>
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+
+      <div class="form-group">
+        {{ form.value.errors }}
+        <label for="{{ form.value.id_for_label }}">{{ form.value.label }}</label>
+        {{ form.value }}
+      </div>
+
+      <div class="form-group">
+        {{ form.quantity.errors }}
+        <label for="{{ form.quantity.id_for_label }}">{{ form.quantity.label }}</label>
+        {{ form.quantity }}
+      </div>
+
+      <button type="submit" class="btn btn-primary">Vend</button>
+    </fieldset>
+  </form>
+</div>
+{% endblock %}

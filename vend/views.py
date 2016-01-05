@@ -4,8 +4,8 @@ from django.utils import timezone
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 
-from .forms import VendForm
-from .helpers import write_vouchers
+from .forms import VendStandardVoucherForm, VendInstantVoucherForm
+from .helpers import write_vouchers, get_price_choices
 
 def file_generator(_file):
     with open(_file.name, 'r') as f:
@@ -13,10 +13,10 @@ def file_generator(_file):
             yield line
 
 @login_required
-def index(request):
+def index(request, template=None, vend_form=None, prices=None):
     context = {}
     if request.method == 'POST':
-        form = VendForm(request.POST, user=request.user)
+        form = vend_form(request.POST, user=request.user, prices=prices)
         if form.is_valid():
             response = form.save()
             vouchers = response['results']
@@ -31,7 +31,7 @@ def index(request):
             response['Content-Disposition'] = 'attachment; filename="%s"' % file_name
             return response
     else:
-        form = VendForm()
+        form = vend_form(prices=prices)
 
     context.update({'form': form})
-    return render(request, 'vend/index.html', context)
+    return render(request, template, context)

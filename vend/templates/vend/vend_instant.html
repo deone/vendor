@@ -2,18 +2,12 @@
 
 {% block title %}Vend Vouchers{% endblock %}
 
-{% block nav_items %}
-<ul class="nav navbar-nav navbar-right">
-  <li><a href="{% url 'logout' %}">Logout</a></li>
-</ul>
-{% endblock %}
-
 {% block app_body %}
 <div class="row">
   <form method="post" action="" class="vend-form">
     <fieldset>
       <div class="page-header">
-        <h1>Vend Vouchers</h1>
+        <h1>Vend Instant Vouchers</h1>
       </div>
       {% csrf_token %}
       {{ form.non_field_errors }}
