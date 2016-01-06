@@ -1,3 +1,5 @@
 from settings_test import *
 
-DEBUG = TEMPLATE_DEBUG = False
+DEBUG = False
+
+IP = '154.117.8.18'
