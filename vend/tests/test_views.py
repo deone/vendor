@@ -30,11 +30,11 @@ class ViewsTests(TestCase):
         factory = RequestFactory()
         session = SessionMiddleware()
 
-        pin_one = {'pin': '12345678901234'}
-        pin_two = {'pin': '12345678901233'}
+        data_one = {'pin': '12345678901234', 'voucher_type': 'STD'}
+        data_two = {'pin': '12345678901233', 'voucher_type': 'STD'}
 
-        send_api_request(settings.VOUCHER_STUB_INSERT_URL, pin_one)
-        send_api_request(settings.VOUCHER_STUB_INSERT_URL, pin_two)
+        voucher_one = send_api_request(settings.VOUCHER_STUB_INSERT_URL, data_one)
+        voucher_two = send_api_request(settings.VOUCHER_STUB_INSERT_URL, data_two)
 
         prices = get_price_choices('STD')
 
@@ -44,8 +44,10 @@ class ViewsTests(TestCase):
 
         response = index(request, template='vend/vend_standard.html', vend_form=VendStandardVoucherForm, prices=prices)
 
-        send_api_request(settings.VOUCHER_STUB_DELETE_URL, pin_one)
-        send_api_request(settings.VOUCHER_STUB_DELETE_URL, pin_two)
+        data_one.update({'voucher_id': voucher_one['id']})
+        data_two.update({'voucher_id': voucher_two['id']})
+        send_api_request(settings.VOUCHER_STUB_DELETE_URL, data_one)
+        send_api_request(settings.VOUCHER_STUB_DELETE_URL, data_two)
 
         self.assertEqual(response['Content-Type'], 'text/csv')
         self.assertNotEqual(response.content, '')
