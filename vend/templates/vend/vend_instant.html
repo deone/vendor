@@ -2,6 +2,24 @@
 
 {% block title %}Vend Vouchers{% endblock %}
 
+{% block nav_items %}
+<ul class="nav navbar-nav">
+  <li class="dropdown">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+      Vend <span class="sr-only">(current)</span>
+      <span class="caret"></span>
+    </a>
+    <ul class="dropdown-menu">
+      <li><a href="{% url 'vend_instant' %}">Instant</a></li>
+      <li><a href="{% url 'vend_standard' %}">Standard</a></li>
+    </ul>
+  </li>
+</ul>
+<ul class="nav navbar-nav navbar-right">
+  <li><a href="{% url 'logout' %}">Logout</a></li>
+</ul>
+{% endblock %}
+
 {% block app_body %}
 <div class="row">
   <form method="post" action="" class="vend-form">
