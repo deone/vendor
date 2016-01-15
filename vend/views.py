@@ -22,7 +22,12 @@ def index(request, template=None, vend_form=None, prices=None):
             vouchers = response['results']
 
             # Write vouchers to file and return download
-            file_name = 'Vouchers_' + timezone.now().strftime('%d-%m-%Y_%I:%M') + '.txt'
+            if vend_form == VendStandardVoucherForm:
+                file_name = 'Vouchers_Standard_'
+            elif vend_form == VendInstantVoucherForm:
+                file_name = 'Vouchers_Instant_'
+
+            file_name += timezone.now().strftime('%d-%m-%Y_%I:%M') + '.txt'
             _file = settings.VOUCHER_DOWNLOAD_PATH + '/' + file_name
 
             f = write_vouchers(vouchers, _file)
