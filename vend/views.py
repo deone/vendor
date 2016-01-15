@@ -22,12 +22,12 @@ def index(request, template=None, vend_form=None, prices=None):
             vouchers = response['results']
 
             # Write vouchers to file and return download
-            file_name = 'Vouchers_' + timezone.now().strftime('%d-%m-%Y_%I:%M') + '.csv'
+            file_name = 'Vouchers_' + timezone.now().strftime('%d-%m-%Y_%I:%M') + '.txt'
             _file = settings.VOUCHER_DOWNLOAD_PATH + '/' + file_name
 
             f = write_vouchers(vouchers, _file)
 
-            response = HttpResponse(file_generator(f), content_type='text/csv')
+            response = HttpResponse(file_generator(f), content_type='text/plain')
             response['Content-Disposition'] = 'attachment; filename="%s"' % file_name
             return response
     else:
