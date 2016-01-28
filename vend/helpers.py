@@ -19,9 +19,9 @@ def write_vouchers(voucher_list, _file):
     for v in voucher_list:
         with open(_file, 'a') as f:
             if len(v) == 2:
-                f.write(zeropad(v[0]) + ',' + v[1] + '\n')
+                f.write(zeropad(v[0]) + ',' + v[1] + '\r\n')
             else:
-                f.write(zeropad(v[0]) + ',' + v[1] + ',' + v[2] + '\n')
+                f.write(zeropad(v[0]) + ',' + v[1] + ',' + v[2] + '\r\n')
 
     return f
 
