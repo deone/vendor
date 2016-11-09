@@ -16,3 +16,19 @@
   color: #f00;
   font-size: 90%;
 }
+
+/* Messages */
+.messages,
+.messages li {
+  margin: 0;
+  padding: 0;
+  color: green;
+}
+.messages {
+  list-style: none;
+  background: #e7e7e7;
+  font-weight: bold;
+}
+.messages li {
+  padding: .5em 0 .5em .5em;
+}
