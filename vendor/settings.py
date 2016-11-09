@@ -130,16 +130,17 @@ QUANTITY_CHOICES = (
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static_live")
 
+# VMS Settings
 VMS_URL = "http://localhost:3000/vouchers/"
-
 VOUCHER_FETCH_URL = VMS_URL + "fetch/"
-
 VOUCHER_VALUES_URL = VMS_URL + "values/"
-
 VOUCHER_STUB_INSERT_URL = VMS_URL + "insert/"
-
 VOUCHER_STUB_DELETE_URL = VMS_URL + "delete/"
-
 VOUCHER_DOWNLOAD_PATH = os.path.join(BASE_DIR, 'downloads')
-
 VEND_QUANTITY = 1
+
+# Twilio Settings
+TWILIO_ACCOUNT_SID = 'ACe0325806bc5842a1f96a115e8c21a384'
+TWILIO_AUTH_TOKEN = '90bd6b99b70d51d97d637a98e33ce8a7'
+WELCOME_SMS = 'Welcome to Spectra Xpress WiFi!'
+TWILIO_NUMBER = '+18177569348'

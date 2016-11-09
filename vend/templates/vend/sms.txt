@@ -1,0 +1,1 @@
+Hello, your voucher PIN is {{ pin }} and serial number {{ serial_no }}.

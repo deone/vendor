@@ -1,5 +1,8 @@
 from django import forms
 from django.conf import settings
+from django.template import loader
+
+from twilio.rest import TwilioRestClient
 
 from .helpers import send_api_request
 
@@ -36,4 +39,17 @@ class VendStandardVoucherForm(forms.Form):
         data.update(self.cleaned_data)
         data.update({'quantity': settings.VEND_QUANTITY})
 
-        return send_api_request(url, data)
+        # Get voucher
+        response = send_api_request(url, data)
+        
+        # Send verification sms
+        context = {
+            'serial_no': response['results'][0][0],
+            'pin': response['results'][0][1],
+        }
+        
+        message = loader.render_to_string('vend/sms.txt', context)
+        
+        phone_number = '+233' + self.cleaned_data['phone_number'][1:]
+        client = TwilioRestClient(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
+        client.messages.create(to=phone_number, from_=settings.TWILIO_NUMBER, body=message)
