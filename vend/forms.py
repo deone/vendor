@@ -22,7 +22,6 @@ class VendInstantVoucherForm(Common):
         return send_api_request(url, data)
 
 class VendStandardVoucherForm(forms.Form):
-    quantity = forms.ChoiceField(label='Quantity', choices=settings.QUANTITY_CHOICES, widget=forms.Select(attrs={'class': 'form-control'}))
     phone_number = forms.CharField(label='Phone Number', max_length=10, widget=forms.TextInput(attrs={'class': 'form-control'}))
 
     def __init__(self, *args, **kwargs):
@@ -35,5 +34,6 @@ class VendStandardVoucherForm(forms.Form):
         url = settings.VOUCHER_FETCH_URL
         data = {'vendor_id': self.user.pk, 'voucher_type': 'STD'}
         data.update(self.cleaned_data)
+        data.update({'quantity': settings.VEND_QUANTITY})
 
         return send_api_request(url, data)
