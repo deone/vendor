@@ -1,2 +1,2 @@
-- Remove 'Quantity' field.
 - Send voucher in SMS to user.
+- Validate phone number field.
