@@ -10,13 +10,6 @@ from vend.helpers import get_price_choices
 urlpatterns = [
     url(r'^$', views.index,
       {
-        'template': 'vend/vend_instant.html',
-        'vend_form': VendInstantVoucherForm,
-        'prices': get_price_choices('INS'),
-      },
-      name='vend_instant'),
-    url(r'^vend/standard/$', views.index,
-      {
         'template': 'vend/vend_standard.html',
         'vend_form': VendStandardVoucherForm,
         'prices': get_price_choices('STD'),

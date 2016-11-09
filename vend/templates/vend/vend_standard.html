@@ -1,13 +1,13 @@
 {% extends 'vend/vend_instant.html' %}
 
-{% block title %}Vend Vouchers{% endblock %}
+{% block title %}Vend Voucher{% endblock %}
 
 {% block app_body %}
 <div class="row">
   <form method="post" action="" class="vend-form">
     <fieldset>
       <div class="page-header">
-        <h1>Vend Standard Vouchers</h1>
+        <h1>Vend Voucher</h1>
       </div>
       {% csrf_token %}
       {{ form.non_field_errors }}
