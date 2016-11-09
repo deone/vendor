@@ -17,6 +17,12 @@
   font-size: 90%;
 }
 
+.header {
+  border-radius: 0;
+  margin-bottom: 0;
+  border: none;
+}
+
 /* Messages */
 .messages,
 .messages li {
