@@ -32,6 +32,12 @@ class VendStandardVoucherForm(forms.Form):
         prices = kwargs.pop('prices', None)
         super(VendStandardVoucherForm, self).__init__(*args, **kwargs)
         self.fields['value'] = forms.ChoiceField(label='Value', choices=prices, widget=forms.Select(attrs={'class': 'form-control'}))
+        
+    def clean_phone_number(self):
+        cleaned_data = super(VendStandardVoucherForm, self).clean()
+        phone_number = cleaned_data.get('phone_number')
+        if phone_number[:3] not in settings.PHONE_NUMBER_PREFIXES:
+            raise forms.ValidationError('Phone Number Invalid', code='number_invalid')
 
     def save(self):
         url = settings.VOUCHER_FETCH_URL
