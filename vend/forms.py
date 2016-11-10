@@ -39,6 +39,8 @@ class VendStandardVoucherForm(forms.Form):
         if phone_number[:3] not in settings.PHONE_NUMBER_PREFIXES:
             raise forms.ValidationError('Provide a valid phone number.', code='number_invalid')
 
+        return phone_number
+
     def save(self):
         url = settings.VOUCHER_FETCH_URL
         data = {'vendor_id': self.user.pk, 'voucher_type': 'STD'}
