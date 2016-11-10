@@ -17,12 +17,12 @@ class ViewsTests(TestCase):
 
     def test_index_get(self):
         self.c.post(reverse('login'), {'username': 'z@z.com', 'password': '12345'})
-        response = self.c.get(reverse('vend_instant'))
+        response = self.c.get(reverse('vend_standard'))
 
         self.assertEqual(response.status_code, 200)
         self.assertTrue('form' in response.context)
-        self.assertTemplateUsed(response, 'vend/vend_instant.html')
-        self.assertTrue(isinstance(response.context['form'], VendInstantVoucherForm))
+        self.assertTemplateUsed(response, 'vend/vend_standard.html')
+        self.assertTrue(isinstance(response.context['form'], VendStandardVoucherForm))
 
     def test_index_post(self):
         self.c.post(reverse('login'), {'username': 'z@z.com', 'password': '12345'})
@@ -49,5 +49,5 @@ class ViewsTests(TestCase):
         send_api_request(settings.VOUCHER_STUB_DELETE_URL, data_one)
         send_api_request(settings.VOUCHER_STUB_DELETE_URL, data_two)
 
-        self.assertEqual(response['Content-Type'], 'text/csv')
+        self.assertEqual(response['Content-Type'], 'text/html; charset=utf-8')
         self.assertNotEqual(response.content, '')
