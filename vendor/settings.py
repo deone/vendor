@@ -143,8 +143,8 @@ VEND_QUANTITY = 1
 SMS_URL = 'https://api.smsgh.com/v3/messages/send'
 SMS_PARAMS = {
     'From': 'XWF',
-    'ClientId': 'basjxmbe',
-    'ClientSecret': 'pngstytl',
+    'ClientId': 'qtrufcsm',
+    'ClientSecret': 'mgzqaxfe',
     'RegisteredDelivery': 'true'
 }
 
