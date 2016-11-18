@@ -48,18 +48,38 @@ class VendStandardVoucherForm(forms.Form):
         data.update({'quantity': settings.VEND_QUANTITY})
 
         # Get voucher
-        response = send_api_request(url, data)
+        voucher = send_api_request(url, data)
+        serial_no = voucher['results'][0][0]
+        pin = voucher['results'][0][1]
         
-        # Send verification sms
-        context = {
-            'serial_no': response['results'][0][0],
-            'pin': response['results'][0][1],
-        }
+        # Redeem voucher
+        redeemed_voucher = send_api_request(settings.VOUCHER_REDEEM_URL, {'pin': pin})
+
+        # Recharge customer account
+        recharge = send_api_request(settings.ACCOUNT_RECHARGE_URL, {
+            'phone_number': self.cleaned_data['phone_number'],
+            'amount': redeemed_voucher['value'],
+            'serial_no': redeemed_voucher['serial_number'],
+        })
         
-        message = loader.render_to_string('vend/sms.txt', context)
-        
-        # Send voucher to customer
-        params = settings.SMS_PARAMS
-        phone_number = '+233' + self.cleaned_data['phone_number'][1:]
-        params.update({'Content': message, 'To': phone_number})
-        response = requests.get(settings.SMS_URL, params)
+        response = {}
+        if recharge['code'] == 200:
+            # Send recharge notification
+            context = {
+                'serial_no': serial_no,
+                'pin': pin,
+            }
+
+            message = loader.render_to_string('vend/sms.txt', context)
+
+            params = settings.SMS_PARAMS
+            phone_number = '+233' + self.cleaned_data['phone_number'][1:]
+            params.update({'Content': message, 'To': phone_number})
+            sms_response = requests.get(settings.SMS_URL, params)
+
+            response.update({'recharged': True})
+        else:
+            response.update({'recharged': False})
+
+        response.update({'message': recharge['message']})
+        return response

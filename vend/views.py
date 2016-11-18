@@ -19,9 +19,11 @@ def index(request, template=None, vend_form=None, prices=None):
     if request.method == 'POST':
         form = vend_form(request.POST, user=request.user, prices=prices)
         if form.is_valid():
-            form.save()
-            messages.success(request, 'Voucher vended successfully.')
-            return redirect('vend_standard')
+            response = form.save()
+            if response['recharged'] == True:
+                messages.success(request, response['message'])
+                return redirect('vend_standard')
+            return messages.error(request, response['message'])
 
     else:
         form = vend_form(prices=prices)

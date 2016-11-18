@@ -12,4 +12,4 @@ VOUCHER_STUB_DELETE_URL = VMS_URL + "delete/"
 VOUCHER_REDEEM_URL = VMS_URL + "redeem/"
 
 # Billing settings
-ACCOUNT_RECHARGE_URL = "http://" + IP + "7700/accounts/topup/"
+ACCOUNT_RECHARGE_URL = "http://" + IP + ":7700/accounts/topup/"
