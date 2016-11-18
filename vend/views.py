@@ -23,8 +23,9 @@ def index(request, template=None, vend_form=None, prices=None):
             if response['recharged'] == True:
                 messages.success(request, response['message'])
                 return redirect('vend_standard')
-            return messages.error(request, response['message'])
-
+            else:
+                messages.error(request, response['message'])
+                return redirect('vend_standard')
     else:
         form = vend_form(prices=prices)
 

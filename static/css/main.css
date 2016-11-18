@@ -27,14 +27,16 @@
 .messages,
 .messages li {
   margin: 0;
-  padding: 0;
-  color: green;
+  padding: .5em 0 .5em .5em;
 }
 .messages {
   list-style: none;
   background: #e7e7e7;
   font-weight: bold;
 }
-.messages li {
-  padding: .5em 0 .5em .5em;
+.messages li.success {
+  color: green;
+}
+.messages li.error {
+  color: red;
 }
