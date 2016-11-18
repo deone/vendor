@@ -130,12 +130,6 @@ QUANTITY_CHOICES = (
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static_live")
 
-# VMS Settings
-VMS_URL = "http://localhost:3000/vouchers/"
-VOUCHER_FETCH_URL = VMS_URL + "fetch/"
-VOUCHER_VALUES_URL = VMS_URL + "values/"
-VOUCHER_STUB_INSERT_URL = VMS_URL + "insert/"
-VOUCHER_STUB_DELETE_URL = VMS_URL + "delete/"
 VOUCHER_DOWNLOAD_PATH = os.path.join(BASE_DIR, 'downloads')
 VEND_QUANTITY = 1
 
