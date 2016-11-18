@@ -54,11 +54,12 @@ class VendStandardVoucherForm(forms.Form):
         
         # Redeem voucher
         redeemed_voucher = send_api_request(settings.VOUCHER_REDEEM_URL, {'pin': pin})
+        amount = redeemed_voucher['value']
 
         # Recharge customer account
         recharge = send_api_request(settings.ACCOUNT_RECHARGE_URL, {
             'phone_number': self.cleaned_data['phone_number'],
-            'amount': redeemed_voucher['value'],
+            'amount': amount,
             'serial_no': redeemed_voucher['serial_number'],
         })
         
@@ -68,6 +69,7 @@ class VendStandardVoucherForm(forms.Form):
             context = {
                 'serial_no': serial_no,
                 'pin': pin,
+                'amount': amount,
             }
 
             message = loader.render_to_string('vend/sms.txt', context)
