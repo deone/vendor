@@ -20,6 +20,12 @@ class VendStandardVoucherFormTest(SimpleTestCase):
         
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors['phone_number'][0], 'Provide a valid phone number.')
+        
+        data.update({'phone_number': '0542751610'})
+        form = VendStandardVoucherForm(data, user=self.user, prices=self.prices)
+        
+        self.assertTrue(form.is_valid())
+        self.assertEqual(form.errors, {})
 
     def tearDown(self):
         # Delete test voucher
