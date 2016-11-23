@@ -6,7 +6,7 @@ import requests
 
 from .helpers import send_api_request
 
-class Common(forms.Form):
+""" class Common(forms.Form):
     quantity = forms.ChoiceField(label='Quantity', choices=settings.QUANTITY_CHOICES, widget=forms.Select(attrs={'class': 'form-control'}))
 
     def __init__(self, *args, **kwargs):
@@ -22,7 +22,7 @@ class VendInstantVoucherForm(Common):
         data = {'vendor_id': self.user.pk, 'voucher_type': 'INS'}
         data.update(self.cleaned_data)
 
-        return send_api_request(url, data)
+        return send_api_request(url, data) """
 
 class VendStandardVoucherForm(forms.Form):
     phone_number = forms.CharField(label='Phone Number', max_length=10, widget=forms.TextInput(attrs={'class': 'form-control'}))

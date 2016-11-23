@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.sessions.middleware import SessionMiddleware
 from django.conf import settings
 
-from ..forms import VendStandardVoucherForm, VendInstantVoucherForm
+from ..forms import VendStandardVoucherForm
 from ..models import Vendor
 from ..views import index
 from ..helpers import send_api_request, get_price_choices

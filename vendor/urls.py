@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 
 from accounts.forms import VendorAuthenticationForm
-from vend.forms import VendStandardVoucherForm, VendInstantVoucherForm
+from vend.forms import VendStandardVoucherForm
 from vend import views
 from vend.helpers import get_price_choices
 
