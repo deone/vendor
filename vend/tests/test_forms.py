@@ -11,31 +11,53 @@ class VendStandardVoucherFormTest(SimpleTestCase):
         # Create test voucher
         self.user = User.objects.create_user('a@a.com', 'a@a.com', '12345')
         self.voucher = send_api_request(settings.VOUCHER_STUB_INSERT_URL, data={'voucher_type': 'STD', 'pin': '12345678901234'})
-        self.data = {'phone_number': '0542751610', 'value': '5'}
-        self.prices = get_price_choices('STD')
 
     def test_clean_phone_number(self):
+        # Get voucher prices
+        prices = get_price_choices('STD')
+
         data = {'phone_number': '0001234567', 'value': '5'}
-        form = VendStandardVoucherForm(data, user=self.user, prices=self.prices)
+        form = VendStandardVoucherForm(data, user=self.user, prices=prices)
         
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors['phone_number'][0], 'Provide a valid phone number.')
         
-        form = VendStandardVoucherForm(self.data, user=self.user, prices=self.prices)
+        data = {'phone_number': '0543751610', 'value': '5'}
+        form = VendStandardVoucherForm(data, user=self.user, prices=prices)
         
         self.assertTrue(form.is_valid())
         self.assertEqual(form.errors, {})
 
-    def test_save(self):
-        created = send_api_request(settings.ACCOUNT_CREATE_URL, data={'username': '0542751610'})
+    def test_save_valid_account(self):
+        created = send_api_request(settings.ACCOUNT_CREATE_URL, data={'username': '0231802940'})
         self.assertEqual(created['status'], 'ok')
 
-        form = VendStandardVoucherForm(self.data, user=self.user, prices=self.prices)
-        self.assertTrue(form.is_valid())
+        # Get voucher prices
+        prices = get_price_choices('STD')
 
+        # Vend
+        data = {'phone_number': '0231802940', 'value': '5'}
+        form = VendStandardVoucherForm(data, user=self.user, prices=prices)
+
+        # Test
+        self.assertTrue(form.is_valid())
         response = form.save()
         self.assertTrue(response['recharged'])
         self.assertEqual(response['message'], 'Account recharge successful.')
+        
+    def test_save_account_not_exist(self):
+        # Get voucher prices
+        prices = get_price_choices('STD')
+
+        # Vend
+        data = {'phone_number': '0544433333', 'value': '5'}
+        form = VendStandardVoucherForm(data, user=self.user, prices=prices)
+
+        # Test
+        self.assertTrue(form.is_valid())
+        response = form.save()
+        self.assertFalse(response['recharged'])
+        self.assertEqual(response['message'], 'Account does not exist.')
 
     def tearDown(self):
         self.user.delete()
