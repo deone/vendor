@@ -28,35 +28,41 @@ class ViewsTests(TestCase):
         self.assertTemplateUsed(response, 'vend/vend_standard.html')
         self.assertTrue(isinstance(response.context['form'], VendStandardVoucherForm))
 
+    def process_request(self, request):
+        request.user = self.user
+        session = SessionMiddleware()
+        session.process_request(request)
+        request.session.save()
+        messages = FallbackStorage(request)
+        setattr(request, '_messages', messages)
+
+    def message_list(self, request):
+        storage = get_messages(request)
+        lst = []
+        for message in storage:
+            lst.append(message)
+        return lst
+
+    def check_response(self, response, message, msg_list):
+        self.assertEqual(response['Content-Type'], 'text/html; charset=utf-8')
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(message, msg_list[0].__str__())
+        self.assertEqual(response.get('location'), reverse('vend_standard'))
+
     def test_index_post(self):
         self.c.post(reverse('login'), {'username': 'z@z.com', 'password': '12345'})
 
         factory = RequestFactory()
-        session = SessionMiddleware()
+        vendor = Vendor.objects.create(user=self.user, company_name="Vender Inc.")
+
+        request = factory.post(reverse('vend_standard'), data={'value': 5, 'phone_number': '0231802940'})
+        self.process_request(request)
 
         prices = get_price_choices('STD')
-
-        vendor = Vendor.objects.create(user=self.user, company_name="Vender Inc.")
-        request = factory.post(reverse('vend_standard'), data={'value': 5, 'phone_number': '0231802940'})
-        request.user = self.user
-        
-        session.process_request(request)
-        request.session.save()
-
-        messages = FallbackStorage(request)
-        setattr(request, '_messages', messages)
-
         response = index(request, template='vend/vend_standard.html', vend_form=VendStandardVoucherForm, prices=prices)
-        storage = get_messages(request)
-        
-        lst = []
-        for message in storage:
-            lst.append(message)
+        lst = self.message_list(request)
 
-        self.assertEqual(response['Content-Type'], 'text/html; charset=utf-8')
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual('Account recharge successful.', lst[0].__str__())
-        self.assertEqual(response.get('location'), reverse('vend_standard'))
+        self.check_response(response, 'Account recharge successful.', lst)
 
     def tearDown(self):
         send_api_request(settings.VOUCHER_STUB_DELETE_URL, data={'voucher_id': self.voucher_one['id'], 'voucher_type': 'STD'})
