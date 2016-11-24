@@ -54,15 +54,25 @@ class ViewsTests(TestCase):
 
         factory = RequestFactory()
         vendor = Vendor.objects.create(user=self.user, company_name="Vender Inc.")
+        prices = get_price_choices('STD')
 
+        # Success
         request = factory.post(reverse('vend_standard'), data={'value': 5, 'phone_number': '0231802940'})
         self.process_request(request)
 
-        prices = get_price_choices('STD')
         response = index(request, template='vend/vend_standard.html', vend_form=VendStandardVoucherForm, prices=prices)
         lst = self.message_list(request)
 
         self.check_response(response, 'Account recharge successful.', lst)
+
+        # Failure
+        request = factory.post(reverse('vend_standard'), data={'value': 5, 'phone_number': '0234445555'})
+        self.process_request(request)
+
+        response = index(request, template='vend/vend_standard.html', vend_form=VendStandardVoucherForm, prices=prices)
+        lst = self.message_list(request)
+
+        self.check_response(response, 'Account does not exist.', lst)
 
     def tearDown(self):
         send_api_request(settings.VOUCHER_STUB_DELETE_URL, data={'voucher_id': self.voucher_one['id'], 'voucher_type': 'STD'})
