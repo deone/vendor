@@ -2,6 +2,8 @@ from django.test import TestCase, Client, RequestFactory
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.contrib.sessions.middleware import SessionMiddleware
+from django.contrib.messages.storage.fallback import FallbackStorage
+from django.contrib.messages import get_messages
 from django.conf import settings
 
 from ..forms import VendStandardVoucherForm
@@ -14,6 +16,8 @@ class ViewsTests(TestCase):
     def setUp(self):
         self.c = Client()
         self.user = User.objects.create_user('z@z.com', 'z@z.com', '12345')
+        self.voucher_one = send_api_request(settings.VOUCHER_STUB_INSERT_URL, {'pin': '12345678901234', 'voucher_type': 'STD'})
+        self.voucher_two = send_api_request(settings.VOUCHER_STUB_INSERT_URL, {'pin': '12345678901233', 'voucher_type': 'STD'})
 
     def test_index_get(self):
         self.c.post(reverse('login'), {'username': 'z@z.com', 'password': '12345'})
@@ -30,24 +34,30 @@ class ViewsTests(TestCase):
         factory = RequestFactory()
         session = SessionMiddleware()
 
-        data_one = {'pin': '12345678901234', 'voucher_type': 'STD'}
-        data_two = {'pin': '12345678901233', 'voucher_type': 'STD'}
-
-        voucher_one = send_api_request(settings.VOUCHER_STUB_INSERT_URL, data_one)
-        voucher_two = send_api_request(settings.VOUCHER_STUB_INSERT_URL, data_two)
-
         prices = get_price_choices('STD')
 
         vendor = Vendor.objects.create(user=self.user, company_name="Vender Inc.")
-        request = factory.post(reverse('vend_standard'), data={'value': 5, 'quantity': 2})
+        request = factory.post(reverse('vend_standard'), data={'value': 5, 'phone_number': '0231802940'})
         request.user = self.user
+        
+        session.process_request(request)
+        request.session.save()
+
+        messages = FallbackStorage(request)
+        setattr(request, '_messages', messages)
 
         response = index(request, template='vend/vend_standard.html', vend_form=VendStandardVoucherForm, prices=prices)
-
-        data_one.update({'voucher_id': voucher_one['id']})
-        data_two.update({'voucher_id': voucher_two['id']})
-        send_api_request(settings.VOUCHER_STUB_DELETE_URL, data_one)
-        send_api_request(settings.VOUCHER_STUB_DELETE_URL, data_two)
+        storage = get_messages(request)
+        
+        lst = []
+        for message in storage:
+            lst.append(message)
 
         self.assertEqual(response['Content-Type'], 'text/html; charset=utf-8')
-        self.assertNotEqual(response.content, '')
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual('Account recharge successful.', lst[0].__str__())
+        self.assertEqual(response.get('location'), reverse('vend_standard'))
+
+    def tearDown(self):
+        send_api_request(settings.VOUCHER_STUB_DELETE_URL, data={'voucher_id': self.voucher_one['id'], 'voucher_type': 'STD'})
+        send_api_request(settings.VOUCHER_STUB_DELETE_URL, data={'voucher_id': self.voucher_two['id'], 'voucher_type': 'STD'})

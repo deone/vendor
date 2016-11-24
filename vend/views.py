@@ -6,12 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 from .forms import VendStandardVoucherForm
-from .helpers import write_vouchers, get_price_choices
-
-def file_generator(_file):
-    with open(_file.name, 'r') as f:
-        for line in f:
-            yield line
+from .helpers import get_price_choices
 
 @login_required
 def index(request, template=None, vend_form=None, prices=None):
