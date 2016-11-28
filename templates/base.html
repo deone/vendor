@@ -28,6 +28,9 @@
         </div>
         
         <div class="collapse navbar-collapse" id="vendor-navbar-collapse">
+          <ul class="nav navbar-nav">
+            {% block report_link %}<li><a href="{% url 'report' %}">Vend Report</a></li>{% endblock %}
+          </ul>
           <ul class="nav navbar-nav navbar-right">
             {% if user.is_authenticated %}
               <li><a href="{% url 'logout' %}">Logout</a></li>

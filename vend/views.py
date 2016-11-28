@@ -26,3 +26,8 @@ def index(request, template=None, vend_form=None, prices=None):
 
     context.update({'form': form})
     return render(request, template, context)
+
+@login_required
+def report(request):
+    context = {}
+    return render(request, 'vend/report.html', context)
