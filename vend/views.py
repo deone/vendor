@@ -8,6 +8,8 @@ from django.contrib import messages
 from .forms import VendStandardVoucherForm
 from .helpers import get_price_choices
 
+import requests
+
 @login_required
 def index(request, template=None, vend_form=None, prices=None):
     context = {}
@@ -30,4 +32,15 @@ def index(request, template=None, vend_form=None, prices=None):
 @login_required
 def report(request):
     context = {}
+    vendor_id = request.user.vendor.id
+    if request.method == 'POST':
+        pass
+    else:
+        response = requests.get(settings.VEND_FETCH_URL + str(vendor_id) + '/')
+        response = response.json()
+        if response['code'] == 200:
+            context.update({'vends': response['result']})
+        else:
+            pass
+
     return render(request, 'vend/report.html', context)

@@ -1,3 +1,9 @@
 {% extends 'base.html' %}
 
+{% block title %}Vend Report{% endblock %}
+
 {% block report_link %}<li class="active"><a href="{% url 'report' %}">Vend Report</a></li>{% endblock %}
+
+{% block app_body %}
+{{ vends }}
+{% endblock %}
