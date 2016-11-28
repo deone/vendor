@@ -5,5 +5,31 @@
 {% block report_link %}<li class="active"><a href="{% url 'report' %}">Vend Report</a></li>{% endblock %}
 
 {% block app_body %}
-{{ vends }}
+<div class="row">
+    <div class="col-md-3">
+        <div style="background: #ff0;">dkfdjf</div>
+    </div>
+    <div class="col-md-9">
+        <div>
+            <table class="table table-striped table-bordered table-hover">
+                <thead>
+                    <tr>
+                      <th scope="col">Vend Date/Time</th>
+                      <th scope="col">Value</th>
+                      <th scope="col">Phone Number</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for vend in vends %}
+                    <tr>
+                      <td>{{ vend.date_of_vend }}</td>
+                      <td>{{ vend.value }}</td>
+                      <td>{{ vend.phone_number }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 {% endblock %}

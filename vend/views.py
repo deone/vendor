@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.core.paginator import Paginator
 from django.http import HttpResponse
 from django.utils import timezone
 from django.conf import settings
@@ -39,6 +40,7 @@ def report(request):
         response = requests.get(settings.VEND_FETCH_URL + str(vendor_id) + '/')
         response = response.json()
         if response['code'] == 200:
+            p = Paginator(response['result'], 2)
             context.update({'vends': response['result']})
         else:
             pass
