@@ -10,6 +10,7 @@ from .forms import VendStandardVoucherForm
 from .helpers import get_price_choices
 
 import requests
+from datetime import datetime
 
 @login_required
 def index(request, template=None, vend_form=None, prices=None):
@@ -40,8 +41,11 @@ def report(request):
         response = requests.get(settings.VEND_FETCH_URL + str(vendor_id) + '/')
         response = response.json()
         if response['code'] == 200:
-            p = Paginator(response['result'], 2)
-            context.update({'vends': response['result']})
+            lst = [{
+                'value': r['value'],
+                'phone_number': r['phone_number'],
+                'date_of_vend': datetime.strptime(r['date_of_vend'].split('.')[0], "%Y-%m-%d %H:%M:%S")} for r in response['result']]
+            context.update({'vends': lst})
         else:
             pass
 
