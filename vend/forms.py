@@ -25,7 +25,7 @@ class VendStandardVoucherForm(forms.Form):
 
     def save(self):
         url = settings.VOUCHER_FETCH_URL
-        data = {'vendor_id': self.user.pk, 'voucher_type': 'STD'}
+        data = {'vendor_id': self.user.vendor.pk, 'voucher_type': 'STD'}
         data.update(self.cleaned_data)
         data.update({'quantity': settings.VEND_QUANTITY})
 

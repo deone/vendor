@@ -5,11 +5,14 @@ from django.conf import settings
 from ..helpers import get_price_choices, send_api_request
 from ..forms import VendStandardVoucherForm
 
+from ..models import Vendor
+
 class VendStandardVoucherFormTest(SimpleTestCase):
 
     def setUp(self):
         # Create test voucher
         self.user = User.objects.create_user('a@a.com', 'a@a.com', '12345')
+        Vendor.objects.create(user=self.user, company_name='Test')
         self.voucher = send_api_request(settings.VOUCHER_STUB_INSERT_URL, data={'voucher_type': 'STD', 'pin': '12345678901234'})
 
     def test_clean_phone_number(self):
