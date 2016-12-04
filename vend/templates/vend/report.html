@@ -12,24 +12,28 @@
     <div class="col-md-9">
         <div class="row">
             <div>
-                <table class="table table-striped table-bordered table-hover">
-                    <thead>
-                        <tr>
-                          <th scope="col">Vend Date/Time</th>
-                          <th scope="col">Value</th>
-                          <th scope="col">Phone Number</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    {% for vend in vends %}
-                        <tr>
-                          <td>{{ vend.date_of_vend }}</td>
-                          <td>{{ vend.value }}</td>
-                          <td>{{ vend.phone_number }}</td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+                {% if not message %}
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead>
+                            <tr>
+                              <th scope="col">Vend Date/Time</th>
+                              <th scope="col">Value</th>
+                              <th scope="col">Phone Number</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for vend in vends %}
+                            <tr>
+                              <td>{{ vend.date_of_vend }}</td>
+                              <td>{{ vend.value }}</td>
+                              <td>{{ vend.phone_number }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p class="well">{{ message }}</p>
+                {% endif %}
             </div>
         </div>
         <div class="row">

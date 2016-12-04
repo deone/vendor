@@ -31,6 +31,18 @@ def index(request, template=None, vend_form=None, prices=None):
     context.update({'form': form})
     return render(request, template, context)
 
+def paginate(request, lst):
+    paginator = Paginator(lst, settings.VENDS_PER_PAGE)
+    page = request.GET.get('page')
+    try:
+        vends = paginator.page(page)
+    except PageNotAnInteger:
+        vends = paginator.page(1)
+    except EmptyPage:
+        vends = paginator.page(paginator.num_pages)
+
+    return vends
+
 @login_required
 def report(request):
     context = {}
@@ -45,17 +57,10 @@ def report(request):
                 'value': r['value'],
                 'phone_number': r['phone_number'],
                 'date_of_vend': datetime.strptime(r['date_of_vend'].split('.')[0], "%Y-%m-%d %H:%M:%S")} for r in response['result']]
+
+            vends = paginate(request, lst)
+            context.update({'vends': vends})
         else:
-            pass
+            context.update({'message': response['message']})
 
-    paginator = Paginator(lst, settings.VENDS_PER_PAGE)
-    page = request.GET.get('page')
-    try:
-        vends = paginator.page(page)
-    except PageNotAnInteger:
-        vends = paginator.page(1)
-    except EmptyPage:
-        vends = paginator.page(paginator.num_pages)
-
-    context.update({'vends': vends})
     return render(request, 'vend/report.html', context)
