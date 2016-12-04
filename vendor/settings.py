@@ -132,6 +132,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static_live")
 
 VOUCHER_DOWNLOAD_PATH = os.path.join(BASE_DIR, 'downloads')
 VEND_QUANTITY = 1
+VENDS_PER_PAGE = 4
 
 # SMS settings - SMSGH
 SMS_URL = 'https://api.smsgh.com/v3/messages/send'

@@ -10,25 +10,47 @@
         <div style="background: #ff0;">dkfdjf</div>
     </div>
     <div class="col-md-9">
-        <div>
-            <table class="table table-striped table-bordered table-hover">
-                <thead>
-                    <tr>
-                      <th scope="col">Vend Date/Time</th>
-                      <th scope="col">Value</th>
-                      <th scope="col">Phone Number</th>
-                    </tr>
-                </thead>
-                <tbody>
-                {% for vend in vends %}
-                    <tr>
-                      <td>{{ vend.date_of_vend }}</td>
-                      <td>{{ vend.value }}</td>
-                      <td>{{ vend.phone_number }}</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+        <div class="row">
+            <div>
+                <table class="table table-striped table-bordered table-hover">
+                    <thead>
+                        <tr>
+                          <th scope="col">Vend Date/Time</th>
+                          <th scope="col">Value</th>
+                          <th scope="col">Phone Number</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for vend in vends %}
+                        <tr>
+                          <td>{{ vend.date_of_vend }}</td>
+                          <td>{{ vend.value }}</td>
+                          <td>{{ vend.phone_number }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <nav>
+                <ul class="pager">
+                {% if vends.has_previous %}
+                    <li class="previous">
+                      <a href="?page={{ vends.previous_page_number }}">
+                        <span aria-hidden="true">&larr;</span> Previous
+                      </a>
+                    </li>
+                {% endif %}
+                {% if vends.has_next %}
+                    <li class="next">
+                      <a href="?page={{ vends.next_page_number }}">
+                        Next <span aria-hidden="true">&rarr;</span>
+                      </a>
+                    </li>
+                {% endif %}
+                </ul>
+            </nav>
         </div>
     </div>
 </div>

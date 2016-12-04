@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse
 from django.utils import timezone
 from django.conf import settings
@@ -45,8 +45,17 @@ def report(request):
                 'value': r['value'],
                 'phone_number': r['phone_number'],
                 'date_of_vend': datetime.strptime(r['date_of_vend'].split('.')[0], "%Y-%m-%d %H:%M:%S")} for r in response['result']]
-            context.update({'vends': lst})
         else:
             pass
 
+    paginator = Paginator(lst, settings.VENDS_PER_PAGE)
+    page = request.GET.get('page')
+    try:
+        vends = paginator.page(page)
+    except PageNotAnInteger:
+        vends = paginator.page(1)
+    except EmptyPage:
+        vends = paginator.page(paginator.num_pages)
+
+    context.update({'vends': vends})
     return render(request, 'vend/report.html', context)
