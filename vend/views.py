@@ -5,7 +5,7 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 
 from .forms import VendStandardVoucherForm, VendInstantVoucherForm
-from .helpers import write_vouchers, get_price_choices
+from utils import write_vouchers, get_price_choices
 
 def file_generator(_file):
     with open(_file.name, 'r') as f:

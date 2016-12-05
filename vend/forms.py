@@ -1,7 +1,7 @@
 from django import forms
 from django.conf import settings
 
-from .helpers import send_api_request
+from utils import send_api_request
 
 class Common(forms.Form):
     quantity = forms.ChoiceField(label='Quantity', choices=settings.QUANTITY_CHOICES, widget=forms.Select(attrs={'class': 'form-control'}))
