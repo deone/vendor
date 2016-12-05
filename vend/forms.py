@@ -4,7 +4,7 @@ from django.conf import settings
 from utils import send_api_request
 
 class Common(forms.Form):
-    quantity = forms.ChoiceField(label='Quantity', choices=settings.QUANTITY_CHOICES, widget=forms.Select(attrs={'class': 'form-control'}))
+    phone_number = forms.CharField(label='Phone Number', max_length=10, widget=forms.TextInput(attrs={'class': 'form-control'}))
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user', None)
