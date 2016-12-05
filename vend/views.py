@@ -4,7 +4,6 @@ from django.utils import timezone
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 
-from .forms import VendStandardVoucherForm, VendInstantVoucherForm
 from utils import write_vouchers, get_price_choices
 
 def file_generator(_file):
@@ -38,5 +37,5 @@ def index(request, template=None, vend_form=None, prices=None):
     else:
         form = vend_form(prices=prices)
 
-    context.update({'form': form})
+    context.update({'form': form, 'voucher_types': settings.VOUCHER_TYPES})
     return render(request, template, context)

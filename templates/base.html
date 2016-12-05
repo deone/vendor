@@ -20,11 +20,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <!-- <a class="navbar-brand" href="#">
-            <img alt="Spectra Wireless" src="{#{% static 'images/spectra_logo.png' %}#}">
-            <h1>Voucher Management System</h1>
-          </a> -->
-          <a class="navbar-brand" href="{% url 'vend_instant' %}">Spectra Wireless Vendor</a>
+          <a class="navbar-brand" href="{% url 'vend_standard' %}">Spectra Wireless Vendor</a>
         </div>
 
         <div class="collapse navbar-collapse" id="vendor-navbar-collapse">
@@ -36,7 +32,9 @@
               </a>
               <ul class="dropdown-menu">
                 <li><a href="{% url 'vend_standard' %}">Standard</a></li>
-                <li><a href="{% url 'vend_instant' %}">Instant</a></li>
+                {% if 'INS' in voucher_types %}
+                  <li><a href="{% url 'vend_standard' %}">Instant</a></li>
+                {% endif %}
               </ul>
             </li>
             {% block report_link %}<li><a href="#">Vend Report</a></li>{% endblock %}
