@@ -130,14 +130,9 @@ QUANTITY_CHOICES = (
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static_live")
 
-VMS_URL = "http://localhost:3000/vouchers/"
-
+VMS_URL = "https://vms-deone.c9users.io/vouchers/"
 VOUCHER_FETCH_URL = VMS_URL + "fetch/"
-
 VOUCHER_VALUES_URL = VMS_URL + "values/"
-
 VOUCHER_STUB_INSERT_URL = VMS_URL + "insert/"
-
 VOUCHER_STUB_DELETE_URL = VMS_URL + "delete/"
-
 VOUCHER_DOWNLOAD_PATH = os.path.join(BASE_DIR, 'downloads')

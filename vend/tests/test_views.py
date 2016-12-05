@@ -49,5 +49,5 @@ class ViewsTests(TestCase):
         send_api_request(settings.VOUCHER_STUB_DELETE_URL, data_one)
         send_api_request(settings.VOUCHER_STUB_DELETE_URL, data_two)
 
-        self.assertEqual(response['Content-Type'], 'text/csv')
+        self.assertEqual(response['Content-Type'], 'text/plain')
         self.assertNotEqual(response.content, '')
