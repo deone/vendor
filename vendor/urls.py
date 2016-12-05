@@ -12,7 +12,7 @@ urlpatterns = []
 if 'STD' in settings.VOUCHER_TYPES:
     from vend.forms import VendStandardVoucherForm
     urlpatterns += [
-      url(r'^vend/standard/$', views.index,
+      url(r'^$', views.index,
       {
         'template': 'vend/vend_standard.html',
         'vend_form': VendStandardVoucherForm,
@@ -24,7 +24,7 @@ if 'STD' in settings.VOUCHER_TYPES:
 if 'INS' in settings.VOUCHER_TYPES:
     from vend.forms import VendInstantVoucherForm
     urlpatterns += [
-      url(r'^$', views.index,
+      url(r'^vend/instant/$', views.index,
       {
         'template': 'vend/vend_instant.html',
         'vend_form': VendInstantVoucherForm,
