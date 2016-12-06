@@ -13,6 +13,6 @@ VOUCHER_STUB_INSERT_URL = VMS_URL + "insert/"
 VOUCHER_STUB_DELETE_URL = VMS_URL + "delete/"
 
 # Billing settings
-BILLING_URL = "http://" + IP + ":8080/"
+BILLING_URL = "http://" + IP + ":7700/"
 ACCOUNT_RECHARGE_URL = BILLING_URL + "accounts/topup/"
 ACCOUNT_CREATE_URL = BILLING_URL + "accounts/create_test/"
