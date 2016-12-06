@@ -46,7 +46,7 @@ def paginate(request, lst):
 
 @login_required
 def report(request):
-    context = {}
+    context = {'voucher_types_map': settings.VOUCHER_TYPES_MAP}
     if request.method == 'POST':
         pass
     else:

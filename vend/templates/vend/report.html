@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load vend_tags %}
+
 {% block title %}Vend Report{% endblock %}
 
 {% block report_link %}<li class="active"><a href="{% url 'report' %}">Vend Report</a></li>{% endblock %}
@@ -28,7 +30,7 @@
                 <td>{{ vend.vend_date }}</td>
                 <td>{{ vend.voucher_value }}</td>
                 <td>{{ vend.subscriber_phone_number }}</td>
-                <td>{{ vend.voucher_type }}</td>
+                <td>{{ voucher_types_map|get_item:vend.voucher_type }}</td>
               </tr>
             {% endfor %}
             </tbody>

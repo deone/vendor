@@ -141,5 +141,9 @@ SMS_PARAMS = {
 
 TOPUP_ACCOUNT = True
 VOUCHER_TYPES = ['STD', 'INS']
+VOUCHER_TYPES_MAP = {
+    'INS': 'Instant',
+    'STD': 'Standard'
+}
 
 PHONE_NUMBER_PREFIXES = ['020', '023', '024', '026', '027', '028', '050', '052', '054', '055', '056', '057']
