@@ -16,6 +16,7 @@ if 'STD' in settings.VOUCHER_TYPES:
       {
         'template': 'vend/vend_standard.html',
         'prices': get_price_choices('STD'),
+        'voucher_type': 'STD',
       },
       name='vend_standard'),
     ]
@@ -26,6 +27,7 @@ if 'INS' in settings.VOUCHER_TYPES:
       {
         'template': 'vend/vend_instant.html',
         'prices': get_price_choices('INS'),
+        'voucher_type': 'INS',
       },
       name='vend_instant'),
     ]

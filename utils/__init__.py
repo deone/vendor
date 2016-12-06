@@ -2,6 +2,11 @@ from django.conf import settings
 
 import requests
 
+def file_generator(_file):
+    with open(_file.name, 'r') as f:
+        for line in f:
+            yield line
+
 def get_price_choices(voucher_type):
     lst = [('', 'Select Price')]
 
