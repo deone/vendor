@@ -112,22 +112,6 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
 
-# quantity choices
-ONE = 1
-TWO = 2
-THREE = 3
-FOUR = 4
-FIVE = 5
-
-QUANTITY_CHOICES = (
-    ('', 'Select Quantity'),
-    (ONE, '1'),
-    (TWO, '2'),
-    (THREE, '3'),
-    (FOUR, '4'),
-    (FIVE, '5'),
-)
-
 STATIC_ROOT = os.path.join(BASE_DIR, "static_live")
 
 VMS_URL = "http://vms-deone.c9users.io/vouchers/"
