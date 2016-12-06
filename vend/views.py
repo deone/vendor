@@ -60,4 +60,4 @@ def vends(request):
             vends = paginate(request, lst)
             context.update({'vends': vends})
         
-    return render(request, 'vend/report.html', context)
+    return render(request, 'vend/vends.html', context)
