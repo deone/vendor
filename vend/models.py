@@ -4,6 +4,7 @@ from django.utils import timezone
 
 class Vendor(models.Model):
     user = models.OneToOneField(User)
+    phone_number = models.CharField(max_length=10)
     company_name = models.CharField(max_length=50)
 
 class Vend(models.Model):
@@ -18,11 +19,11 @@ class Vend(models.Model):
     )
 
     vendor = models.ForeignKey(Vendor)
-    phone_number = models.CharField(max_length=10)
+    subscriber_phone_number = models.CharField(max_length=10)
     voucher_id = models.PositiveSmallIntegerField(null=True)
     voucher_value = models.PositiveSmallIntegerField()
     voucher_type = models.CharField(max_length=3, choices=TYPE_CHOICES)
     vend_date = models.DateTimeField(default=timezone.now)
     
     def __str__(self):
-        return "%s - %s - %s" % (self.vendor.company_name, self.phone_number, str(self.value))
+        return "%s - %s - %s" % (self.vendor.company_name, self.subscriber_phone_number, str(self.value))
