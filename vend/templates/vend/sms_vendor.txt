@@ -1,0 +1,1 @@
+Hello, you just topped up {{ phone_number }} with {{ amount }} GHS. Voucher PIN is {{ pin }} and serial number {{ serial_no }}. Thank you.

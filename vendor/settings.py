@@ -128,6 +128,15 @@ BILLING_URL = "http://billing-deone.c9users.io/"
 ACCOUNT_RECHARGE_URL = BILLING_URL + "accounts/topup/"
 ACCOUNT_CREATE_URL = BILLING_URL + "accounts/create_test/"
 
+# SMS settings - SMSGH
+SMS_URL = 'https://api.smsgh.com/v3/messages/send'
+SMS_PARAMS = {
+    'From': 'XWF',
+    'ClientId': 'qtrufcsm',
+    'ClientSecret': 'mgzqaxfe',
+    'RegisteredDelivery': 'true'
+}
+
 TOPUP_ACCOUNT = True
 VOUCHER_TYPES = ['STD', 'INS']
 
