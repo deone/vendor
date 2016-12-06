@@ -17,6 +17,19 @@ class AccountsUserAdmin(UserAdmin):
         (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
     )
 
+def vendor_name(obj):
+    return obj.user.get_full_name()
+
+def vendor_email(obj):
+    return obj.user.username
+
+vendor_name.short_description = 'Vendor Name'
+vendor_email.short_description = 'Vendor Email'
+
+class VendorAdmin(admin.ModelAdmin):
+    list_display = ('id', 'company_name', vendor_name, vendor_email, 'phone_number')
+
 admin.site.unregister(User)
 admin.site.unregister(Group)
+admin.site.register(Vendor, VendorAdmin)
 admin.site.register(User, AccountsUserAdmin)
