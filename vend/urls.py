@@ -29,5 +29,5 @@ if 'INS' in settings.VOUCHER_TYPES:
     ]
 
 urlpatterns += [
-    url(r'^report/$', views.report, name='report'),
+    url(r'^vends/$', views.vends, name='vends'),
 ]

@@ -45,7 +45,7 @@ def paginate(request, lst):
     return vends
 
 @login_required
-def report(request):
+def vends(request):
     context = {
         'voucher_types': settings.VOUCHER_TYPES,
         'voucher_types_map': settings.VOUCHER_TYPES_MAP
