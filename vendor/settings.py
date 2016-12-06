@@ -123,6 +123,8 @@ VOUCHER_STUB_INSERT_URL = VMS_URL + "insert/"
 VOUCHER_STUB_DELETE_URL = VMS_URL + "delete/"
 VOUCHER_DOWNLOAD_PATH = os.path.join(BASE_DIR, 'downloads')
 
+VENDS_PER_PAGE = 15
+
 # Billing settings
 BILLING_URL = "http://billing-deone.c9users.io/"
 ACCOUNT_RECHARGE_URL = BILLING_URL + "accounts/topup/"

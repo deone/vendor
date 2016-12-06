@@ -37,7 +37,7 @@
                 {% endif %}
               </ul>
             </li>
-            {% block report_link %}<li><a href="#">Vend Report</a></li>{% endblock %}
+            {% block report_link %}<li><a href="{% url 'report' %}">Vend Report</a></li>{% endblock %}
           </ul>
           <ul class="nav navbar-nav navbar-right">
             {% if user.is_authenticated %}
