@@ -20,7 +20,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="{% url 'vend_standard' %}">Spectra Wireless Vendor</a>
+          <a class="navbar-brand" href="{% url 'vend:standard' %}">Spectra Wireless Vendor</a>
         </div>
 
         <div class="collapse navbar-collapse" id="vendor-navbar-collapse">
@@ -32,13 +32,13 @@
                   <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
-                  <li><a href="{% url 'vend_standard' %}">Standard</a></li>
+                  <li><a href="{% url 'vend:standard' %}">Standard</a></li>
                   {% if 'INS' in voucher_types %}
-                    <li><a href="{% url 'vend_instant' %}">Instant</a></li>
+                    <li><a href="{% url 'vend:instant' %}">Instant</a></li>
                   {% endif %}
                 </ul>
               </li>
-              {% block report_link %}<li><a href="{% url 'report' %}">Vend Report</a></li>{% endblock %}
+              {% block report_link %}<li><a href="{% url 'vend:report' %}">Vend Report</a></li>{% endblock %}
             </ul>
             <ul class="nav navbar-nav navbar-right">
               <li><a href="{% url 'logout' %}">Logout</a></li>
