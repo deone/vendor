@@ -114,16 +114,21 @@ STATICFILES_DIRS = (
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static_live")
 
+# VMS settings
 VMS_URL = "http://vms-deone.c9users.io/vouchers/"
 VOUCHER_GET_URL = VMS_URL + "get/"
 VOUCHER_VALUES_URL = VMS_URL + "values/"
+VOUCHER_REDEEM_URL = VMS_URL + "redeem/"
 VOUCHER_STUB_INSERT_URL = VMS_URL + "insert/"
 VOUCHER_STUB_DELETE_URL = VMS_URL + "delete/"
 VOUCHER_DOWNLOAD_PATH = os.path.join(BASE_DIR, 'downloads')
 
+# Billing settings
+BILLING_URL = "http://billing-deone.c9users.io/"
+ACCOUNT_RECHARGE_URL = BILLING_URL + "accounts/topup/"
+ACCOUNT_CREATE_URL = BILLING_URL + "accounts/create_test/"
+
 TOPUP_ACCOUNT = True
-SEND_VENDOR_RECEIPT = True
-SEND_CUSTOMER_RECEIPT = True
 VOUCHER_TYPES = ['STD', 'INS']
 
 PHONE_NUMBER_PREFIXES = ['020', '023', '024', '026', '027', '028', '050', '052', '054', '055', '056', '057']
