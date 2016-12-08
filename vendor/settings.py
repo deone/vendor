@@ -144,6 +144,7 @@ SMS_PARAMS = {
 
 TOPUP_ACCOUNT = True
 VOUCHER_TYPES = ['STD', 'INS']
+VOUCHER_VALUES = [1, 2, 5, 10, 20]
 VOUCHER_TYPES_MAP = {
     'INS': 'Instant',
     'STD': 'Standard'
