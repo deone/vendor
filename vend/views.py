@@ -87,7 +87,7 @@ def get_vendors(request):
         vendor_dict.update({'vend_count': vends_list})
         vendor_list.append(vendor_dict)
 
-    return JsonResponse({'code': 200, 'results': vendor_list})
+    return JsonResponse({'code': 200, 'results': {'vendors': vendor_list, 'voucher_values': settings.VOUCHER_VALUES}})
 
 @ensure_csrf_cookie
 def get_vends_count(request, vendor_id, voucher_value):
