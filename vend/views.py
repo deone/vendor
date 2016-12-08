@@ -5,9 +5,10 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.decorators.csrf import ensure_csrf_cookie
+from django.http import JsonResponse
 
 from .forms import VendForm
-from .models import Vend
+from .models import Vend, Vendor
 
 from utils import write_vouchers, get_price_choices
 
@@ -66,7 +67,9 @@ def vends(request):
 @ensure_csrf_cookie
 def get_vendors(request):
     # Return vendors who made vends today
-    pass
+    distinct_vendor_ids = set([v.vendor.pk for v in Vend.objects.all()])
+    vendors = [Vendor.objects.get(pk=pk).to_dict() for pk in distinct_vendor_ids]
+    return JsonResponse({'code': 200, 'results': vendors})
 
 @ensure_csrf_cookie
 def get_vends_count(request, vendor_id, voucher_value):
