@@ -35,5 +35,9 @@ class Vend(models.Model):
     voucher_type = models.CharField(max_length=3, choices=TYPE_CHOICES)
     vend_date = models.DateTimeField(default=timezone.now)
     
+    def vend_date_is_today(self):
+        now = timezone.now()
+        return [self.vend_date.year, self.vend_date.month, self.vend_date.day] == [now.year, now.month, now.day]
+
     def __str__(self):
         return "%s - %s - %s" % (self.vendor.company_name, self.subscriber_phone_number, str(self.voucher_value))

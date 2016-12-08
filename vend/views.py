@@ -67,18 +67,16 @@ def vends(request):
 @ensure_csrf_cookie
 def get_vendors(request):
     # Return vendors who made vends today
-    now = timezone.now()
-    distinct_vendor_ids = set([v.vendor.pk for v in Vend.objects.filter(
-        vend_date__year=now.year,
-        vend_date__month=now.month,
-        vend_date__day=now.day
-        )])
+    distinct_vendor_ids = set([v.vendor.pk for v in Vend.objects.all() if v.vend_date_is_today()])
     vendors = [Vendor.objects.get(pk=pk).to_dict() for pk in distinct_vendor_ids]
     return JsonResponse({'code': 200, 'results': vendors})
 
 @ensure_csrf_cookie
 def get_vends_count(request, vendor_id, voucher_value):
     # Return number of voucher vends by vendor
+    vendor = Vendor.objects.get(pk=pk)
+    vends_count = Vend.objects.filter(vendor=vendor).count()
+
     print 'Vendor ID', vendor_id
     print 'Voucher value', voucher_value
 
