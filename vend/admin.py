@@ -3,7 +3,15 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User, Group
 from django.utils.translation import ugettext_lazy as _
 
-from .models import Vendor
+from .models import Vendor, Vend
+
+def vend_vendor_name(obj):
+    return obj.vendor.company_name
+
+vend_vendor_name.short_description = 'Company Name'
+
+class VendAdmin(admin.ModelAdmin):
+    list_display = (vend_vendor_name, 'voucher_value', 'subscriber_phone_number', 'vend_date', 'voucher_type')
 
 class VendorInline(admin.StackedInline):
     model = Vendor
@@ -31,5 +39,6 @@ class VendorAdmin(admin.ModelAdmin):
 
 admin.site.unregister(User)
 admin.site.unregister(Group)
+admin.site.register(Vend, VendAdmin)
 admin.site.register(Vendor, VendorAdmin)
 admin.site.register(User, AccountsUserAdmin)
