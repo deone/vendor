@@ -36,4 +36,4 @@ class Vend(models.Model):
     vend_date = models.DateTimeField(default=timezone.now)
     
     def __str__(self):
-        return "%s - %s - %s" % (self.vendor.company_name, self.subscriber_phone_number, str(self.value))
+        return "%s - %s - %s" % (self.vendor.company_name, self.subscriber_phone_number, str(self.voucher_value))
