@@ -31,3 +31,10 @@ if 'INS' in settings.VOUCHER_TYPES:
 urlpatterns += [
     url(r'^vends/$', views.vends, name='vends'),
 ]
+
+# Daily Reports
+urlpatterns += [
+    url(r'^vends/vendors/$', views.get_vendors, name='vendors'),
+    url(r'^vends/count/$', views.get_vends_count, name='vends_count'),
+    url(r'^vends/value/$', views.get_vends_value, name='vends_value'),
+]

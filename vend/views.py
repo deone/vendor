@@ -4,6 +4,7 @@ from django.utils import timezone
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 from .forms import VendForm
 from .models import Vend
@@ -61,3 +62,18 @@ def vends(request):
             context.update({'vends': vends})
         
     return render(request, 'vend/vends.html', context)
+
+@ensure_csrf_cookie
+def get_vendors(request):
+    # Return vendors who made vends today
+    pass
+
+@ensure_csrf_cookie
+def get_vends_count(request, vendor_id, voucher_value):
+    # Return number of voucher vends by vendor
+    pass
+
+@ensure_csrf_cookie
+def get_vends_value(request, vendor_id, voucher_value):
+    # Return value of voucher vends by vendor
+    pass
