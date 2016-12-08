@@ -12,6 +12,7 @@ class Vendor(models.Model):
     
     def to_dict(self):
         return {
+            'vendor_id': self.pk,
             'name': self.user.get_full_name(),
             'phone_number': self.phone_number,
             'company_name': self.company_name
