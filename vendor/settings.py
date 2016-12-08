@@ -83,7 +83,10 @@ DATABASES = {
         'USER': 'vendor',
         'PASSWORD': 'v3nDpASs',
         'HOST': '127.0.0.1',
-        'PORT': '3306'
+        'PORT': '3306',
+        'OPTIONS': {
+            'sql_mode': 'traditional',
+        }
     }
 }
 
