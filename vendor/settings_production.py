@@ -15,6 +15,6 @@ VOUCHER_STUB_INSERT_URL = VMS_URL + "insert/"
 VOUCHER_STUB_DELETE_URL = VMS_URL + "delete/"
 
 # Billing settings
-BILLING_URL = "http://" + IP + ":8080/"
-ACCOUNT_RECHARGE_URL = BILLING_URL + "accounts/topup/"
-ACCOUNT_CREATE_URL = BILLING_URL + "accounts/create_test/"
+BILLING_URL = "http://xwf.spectrawireless.com"
+ACCOUNT_RECHARGE_URL = BILLING_URL + "/accounts/topup/"
+ACCOUNT_CREATE_URL = BILLING_URL + "/accounts/create_test/"
