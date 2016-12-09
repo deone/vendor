@@ -25,7 +25,7 @@ def index(request, template=None, prices=None, voucher_type=None):
                 else:
                     messages.error(request, response['message'])
 
-                return redirect('vend_standard')
+                return redirect('vend:standard')
 
             return response
     else:
