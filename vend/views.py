@@ -81,7 +81,7 @@ def get_vendors(request):
                 vend_date__year=now.year,
                 vend_date__month=now.month,
                 vend_date__day=now.day).count()
-            vends_list.append({voucher_value: vend_count})
+            vends_list.append({'voucher_value': voucher_value, 'count': vend_count})
 
         vendor_dict = vendor.to_dict()
         vendor_dict.update({'vend_count': vends_list})
