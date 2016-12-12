@@ -32,7 +32,7 @@ class Vend(models.Model):
     vendor = models.ForeignKey(Vendor)
     subscriber_phone_number = models.CharField(max_length=10)
     voucher_id = models.PositiveSmallIntegerField(null=True)
-    voucher_value = models.PositiveSmallIntegerField()
+    voucher_value = models.DecimalField(max_digits=4, decimal_places=2)
     voucher_type = models.CharField(max_length=3, choices=TYPE_CHOICES)
     vend_date = models.DateTimeField(default=timezone.now)
     
