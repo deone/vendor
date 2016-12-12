@@ -9,6 +9,7 @@ def vend_vendor_name(obj):
     return obj.vendor.company_name
 
 vend_vendor_name.short_description = 'Company Name'
+vend_vendor_name.admin_order_field = 'vendor__company_name'
 
 class VendAdmin(admin.ModelAdmin):
     list_display = (vend_vendor_name, 'voucher_value', 'subscriber_phone_number', 'vend_date', 'voucher_type')
