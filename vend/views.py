@@ -74,7 +74,7 @@ def get_vends_by_date_range(request, _from, to):
     start = datetime.date(int(_from[0]), int(_from[1]), int(_from[2]))
     end = datetime.date(int(to[0]), int(to[1]), int(to[2]))
 
-    vendor_list = get_active_vendors(start=start, end=end, date=None)
+    vendor_list = get_vendor_vends(start=start, end=end, date=None)
 
     return JsonResponse({'code': 200, 'results': {'vendors': vendor_list, 'voucher_values': settings.VOUCHER_VALUES}})
 
@@ -85,7 +85,13 @@ def get_active_vendors(start=None, end=None, date={}):
     else:
         distinct_vendor_ids = set([v.vendor.pk for v in Vend.objects.all() if v.occurred_between(start, end)])
 
-    vendors = [Vendor.objects.get(pk=pk) for pk in distinct_vendor_ids]
+    return [Vendor.objects.get(pk=pk) for pk in distinct_vendor_ids]
+
+def get_vendor_vends(start=None, end=None, date={}):
+    if date is not None:
+        vendors = get_active_vendors(start=None, end=None, date=date)
+    else:
+        vendors = get_active_vendors(start=start, end=end, date=None)
 
     # Update each dictionary in list with vends count
     vendor_list = []
@@ -138,6 +144,6 @@ def get_vends(request, year=None, month=None, day=None):
         else:
             date = {'year': year, 'month': month, 'day': day}
 
-    vendor_list = get_active_vendors(start=None, end=None, date=date)
+    vendor_list = get_vendor_vends(start=None, end=None, date=date)
 
     return JsonResponse({'code': 200, 'results': {'vendors': vendor_list, 'voucher_values': settings.VOUCHER_VALUES}})
