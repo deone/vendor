@@ -47,7 +47,7 @@ def paginate(request, lst):
     return vends
 
 @login_required
-def vends(request):
+def get_user_vends(request):
     context = {
         'voucher_types': settings.VOUCHER_TYPES,
         'voucher_types_map': settings.VOUCHER_TYPES_MAP
@@ -65,7 +65,7 @@ def vends(request):
     return render(request, 'vend/vends.html', context)
 
 @ensure_csrf_cookie
-def get_vendors(request):
+def get_vends(request):
     # Return vendors who made vends today
     now = timezone.now()
     distinct_vendor_ids = set([v.vendor.pk for v in Vend.objects.all() if v.occurred_today(now)])
