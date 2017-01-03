@@ -10,7 +10,7 @@ from django.http import JsonResponse
 from .forms import VendForm
 from .models import Vend, Vendor
 
-from utils import write_vouchers, get_price_choices
+from utils import write_vouchers, get_price_choices, paginate
 
 import datetime
 
@@ -35,18 +35,6 @@ def index(request, template=None, prices=None, voucher_type=None):
 
     context.update({'form': form, 'voucher_types': settings.VOUCHER_TYPES})
     return render(request, template, context)
-
-def paginate(request, lst):
-    paginator = Paginator(lst, settings.VENDS_PER_PAGE)
-    page = request.GET.get('page')
-    try:
-        vends = paginator.page(page)
-    except PageNotAnInteger:
-        vends = paginator.page(1)
-    except EmptyPage:
-        vends = paginator.page(paginator.num_pages)
-
-    return vends
 
 @login_required
 def get_user_vends(request):

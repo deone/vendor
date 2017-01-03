@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 import requests
 
@@ -40,3 +41,15 @@ def send_api_request(url, data):
         )
 
     return post_response.json()
+
+def paginate(request, lst):
+    paginator = Paginator(lst, settings.VENDS_PER_PAGE)
+    page = request.GET.get('page')
+    try:
+        vends = paginator.page(page)
+    except PageNotAnInteger:
+        vends = paginator.page(1)
+    except EmptyPage:
+        vends = paginator.page(paginator.num_pages)
+
+    return vends
