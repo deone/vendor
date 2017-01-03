@@ -35,6 +35,4 @@ urlpatterns += [
 # Daily Reports
 urlpatterns += [
     url(r'^vends/vendors/$', views.get_vendors, name='vendors'),
-    url(r'^vends/count/(?P<vendor_id>\d+)/(?P<voucher_value>\d+)/$', views.get_vends_count, name='vends_count'),
-    url(r'^vends/value/(?P<vendor_id>\d+)/(?P<voucher_value>\d+)/$', views.get_vends_value, name='vends_value'),
 ]
