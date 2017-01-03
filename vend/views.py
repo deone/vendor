@@ -68,10 +68,32 @@ def get_user_vends(request):
 
 @ensure_csrf_cookie
 def get_vends_by_date_range(request, _from, to):
-    # _from = request.GET['from']
-    # to = request.GET['to']
+    _from = _from.split('-')
+    to = to.split('-')
 
-    print _from, to
+    start = datetime.date(int(_from[0]), int(_from[1]), int(_from[2]))
+    end = datetime.date(int(to[0]), int(to[1]), int(to[2]))
+
+    print start, end
+
+def get_active_vendors(start=None, end=None, date={}):
+    # Get vendors who made vends
+    distinct_vendor_ids = set([v.vendor.pk for v in Vend.objects.all() if v.occurred(**date)])
+    vendors = [Vendor.objects.get(pk=pk) for pk in distinct_vendor_ids]
+
+    # Update each dictionary in list with vends count
+    vendor_list = []
+    for vendor in vendors:
+        vends_list = []
+        for voucher_value in settings.VOUCHER_VALUES:
+            vend_count = len([v for v in Vend.objects.filter(vendor=vendor, voucher_value=voucher_value) if v.occurred(**date)])
+            vends_list.append({'value': voucher_value, 'count': vend_count})
+
+        vendor_dict = vendor.to_dict()
+        vendor_dict.update({'vend_count': vends_list})
+        vendor_list.append(vendor_dict)
+
+    return vendor_list
 
 @ensure_csrf_cookie
 def get_vends(request, year=None, month=None, day=None):
@@ -106,20 +128,6 @@ def get_vends(request, year=None, month=None, day=None):
         else:
             date = {'year': year, 'month': month, 'day': day}
 
-    # Get vendors who made vends
-    distinct_vendor_ids = set([v.vendor.pk for v in Vend.objects.all() if v.occurred(**date)])
-    vendors = [Vendor.objects.get(pk=pk) for pk in distinct_vendor_ids]
-    
-    # Update each dictionary in list with vends count
-    vendor_list = []
-    for vendor in vendors:
-        vends_list = []
-        for voucher_value in settings.VOUCHER_VALUES:
-            vend_count = len([v for v in Vend.objects.filter(vendor=vendor, voucher_value=voucher_value) if v.occurred(**date)])
-            vends_list.append({'value': voucher_value, 'count': vend_count})
-
-        vendor_dict = vendor.to_dict()
-        vendor_dict.update({'vend_count': vends_list})
-        vendor_list.append(vendor_dict)
+    vendor_list = get_active_vendors(start=None, end=None, date=date)
 
     return JsonResponse({'code': 200, 'results': {'vendors': vendor_list, 'voucher_values': settings.VOUCHER_VALUES}})

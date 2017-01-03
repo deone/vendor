@@ -38,5 +38,5 @@ urlpatterns += [
     url(r'^vends/(?P<year>[0-9]{4})$', views.get_vends),
     url(r'^vends/(?P<year>[0-9]{4})/(?P<month>[0-9]+)$', views.get_vends),
     url(r'^vends/(?P<year>[0-9]{4})/(?P<month>[0-9]+)/(?P<day>[0-9]+)$', views.get_vends),
-    url(r'^vends/(?P<_from>[0-9]{4}-[0-9]{2}-[0-9]{2})/(?P<to>[0-9]{4}-[0-9]{2}-[0-9]{2})$', views.get_vends_by_date_range),
+    url(r'^vends/(?P<_from>[0-9]{4}-[0-9]+-[0-9]+)/(?P<to>[0-9]{4}-[0-9]+-[0-9]+)$', views.get_vends_by_date_range),
 ]
