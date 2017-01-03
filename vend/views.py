@@ -77,10 +77,7 @@ def get_vendors(request):
     for vendor in vendors:
         vends_list = []
         for voucher_value in settings.VOUCHER_VALUES:
-            vend_count = Vend.objects.filter(vendor=vendor, voucher_value=voucher_value).filter(
-                vend_date__year=now.year,
-                vend_date__month=now.month,
-                vend_date__day=now.day).count()
+            vend_count = len([v for v in Vend.objects.filter(vendor=vendor, voucher_value=voucher_value) if v.vend_date_is_today()])
             vends_list.append({'value': voucher_value, 'count': vend_count})
 
         vendor_dict = vendor.to_dict()
