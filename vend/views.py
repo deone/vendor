@@ -12,6 +12,8 @@ from .models import Vend, Vendor
 
 from utils import write_vouchers, get_price_choices
 
+import datetime
+
 @login_required
 def index(request, template=None, prices=None, voucher_type=None):
     context = {}
@@ -65,10 +67,47 @@ def get_user_vends(request):
     return render(request, 'vend/vends.html', context)
 
 @ensure_csrf_cookie
-def get_vends(request):
-    # Return vendors who made vends today
+def get_vends_by_date_range(request, _from, to):
+    # _from = request.GET['from']
+    # to = request.GET['to']
+
+    print _from, to
+
+@ensure_csrf_cookie
+def get_vends(request, year=None, month=None, day=None):
     now = timezone.now()
-    distinct_vendor_ids = set([v.vendor.pk for v in Vend.objects.all() if v.occurred_today(now)])
+
+    if year:
+        year = int(year)
+    if month:
+        month = int(month)
+    if day:
+        day = int(day)
+
+    # URL contains only year
+    if month is None and day is None and year:
+        if year > now.year:
+            return JsonResponse({'code': 500, 'message': 'Invalid year.'})
+        else:
+            date = {'year': year}
+
+    # URL contains year and month
+    elif day is None and month and year:
+        if year > now.year or month > now.month:
+            return JsonResponse({'code': 500, 'message': 'Invalid year or month.'})
+        else:
+            date = {'year': year, 'month': month}
+
+    # URL contains year, month and day
+    elif year and month and day:
+        date_supplied = datetime.date(year, month, day)
+        if date_supplied > now.date():
+            return JsonResponse({'code': 500, 'message': 'Invalid date.'})
+        else:
+            date = {'year': year, 'month': month, 'day': day}
+
+    # Get vendors who made vends
+    distinct_vendor_ids = set([v.vendor.pk for v in Vend.objects.all() if v.occurred(**date)])
     vendors = [Vendor.objects.get(pk=pk) for pk in distinct_vendor_ids]
     
     # Update each dictionary in list with vends count
@@ -76,7 +115,7 @@ def get_vends(request):
     for vendor in vendors:
         vends_list = []
         for voucher_value in settings.VOUCHER_VALUES:
-            vend_count = len([v for v in Vend.objects.filter(vendor=vendor, voucher_value=voucher_value) if v.occurred_today(now)])
+            vend_count = len([v for v in Vend.objects.filter(vendor=vendor, voucher_value=voucher_value) if v.occurred(**date)])
             vends_list.append({'value': voucher_value, 'count': vend_count})
 
         vendor_dict = vendor.to_dict()

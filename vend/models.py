@@ -36,15 +36,17 @@ class Vend(models.Model):
     voucher_type = models.CharField(max_length=3, choices=TYPE_CHOICES)
     vend_date = models.DateTimeField(default=timezone.now)
     
-    def occurred_today(self, now):
-        return [self.vend_date.year, self.vend_date.month, self.vend_date.day] == [now.year, now.month, now.day]
+    def occurred(self, **kwargs):
+        year = kwargs.get('year', None)
+        month = kwargs.get('month', None)
+        day = kwargs.get('day', None)
 
-    def occurred_this_week(self):
-        pass
-        # return (self.vend_date >= self.vend_date - 7) and (self.vend_date <= now)
-
-    def occurred_this_month(self):
-        pass
+        if year and month and day:
+            return [self.vend_date.year, self.vend_date.month, self.vend_date.day] == [year, month, day]
+        elif year and month and day is None:
+            return [self.vend_date.year, self.vend_date.month] == [year, month]
+        elif year and month is None and day is None:
+            return self.vend_date.year == year
 
     def __str__(self):
         return "%s - %s - %s" % (self.vendor.company_name, self.subscriber_phone_number, str(self.voucher_value))
