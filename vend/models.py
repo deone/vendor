@@ -48,5 +48,8 @@ class Vend(models.Model):
         elif year and month is None and day is None:
             return self.vend_date.year == year
 
+    def occurred_between(self, start, end):
+        return start <= self.vend_date.date() <= end
+
     def __str__(self):
         return "%s - %s - %s" % (self.vendor.company_name, self.subscriber_phone_number, str(self.voucher_value))
