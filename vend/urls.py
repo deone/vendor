@@ -8,24 +8,24 @@ urlpatterns = []
 
 if 'STD' in settings.VOUCHER_TYPES:
     urlpatterns += [
-      url(r'^$', views.index,
-      {
-        'template': 'vend/vend_standard.html',
-        'prices': get_price_choices('STD'),
-        'voucher_type': 'STD',
-      },
-      name='standard'),
+        url(r'^$', views.index,
+        {
+            'template': 'vend/vend_standard.html',
+            'prices': get_price_choices('STD'),
+            'voucher_type': 'STD',
+        },
+        name='standard'),
     ]
 
 if 'INS' in settings.VOUCHER_TYPES:
     urlpatterns += [
-      url(r'^vend/instant/$', views.index,
-      {
-        'template': 'vend/vend_instant.html',
-        'prices': get_price_choices('INS'),
-        'voucher_type': 'INS',
-      },
-      name='instant'),
+        url(r'^vend/instant/$', views.index,
+        {
+            'template': 'vend/vend_instant.html',
+            'prices': get_price_choices('INS'),
+            'voucher_type': 'INS',
+        },
+        name='instant'),
     ]
 
 urlpatterns += [
@@ -34,9 +34,5 @@ urlpatterns += [
 
 # Daily Reports
 urlpatterns += [
-    # url(r'^vends/vendors$', views.get_vends, name='vends'),
-    url(r'^vends/(?P<year>[0-9]{4})$', views.get_vends),
-    url(r'^vends/(?P<year>[0-9]{4})/(?P<month>[0-9]+)$', views.get_vends),
-    url(r'^vends/(?P<year>[0-9]{4})/(?P<month>[0-9]+)/(?P<day>[0-9]+)$', views.get_vends),
-    url(r'^vends/(?P<_from>[0-9]{4}-[0-9]+-[0-9]+)/(?P<to>[0-9]{4}-[0-9]+-[0-9]+)$', views.get_vends_by_date_range),
+    url(r'^vends$', views.get_vends),
 ]

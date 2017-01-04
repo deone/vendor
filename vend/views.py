@@ -54,50 +54,38 @@ def get_user_vends(request):
     return render(request, 'vend/vends.html', context)
 
 @ensure_csrf_cookie
-def get_vends_by_date_range(request, _from, to):
-    _from = _from.split('-')
-    to = to.split('-')
-
-    start = datetime.date(int(_from[0]), int(_from[1]), int(_from[2]))
-    end = datetime.date(int(to[0]), int(to[1]), int(to[2]))
-
-    vendor_list = get_vendor_vends(start=start, end=end, date=None)
-
-    return JsonResponse({'code': 200, 'results': {'vendors': vendor_list, 'voucher_values': settings.VOUCHER_VALUES}})
-
-@ensure_csrf_cookie
-def get_vends(request, year=None, month=None, day=None):
-    now = timezone.now()
-
+def get_vends(request):
+    year = request.GET.get('year', None)
+    month = request.GET.get('month', None)
+    day = request.GET.get('day', None)
+    
+    _from = request.GET.get('from', None)
+    to = request.GET.get('to', None)
+    
     if year:
         year = int(year)
     if month:
         month = int(month)
     if day:
         day = int(day)
-
-    # URL contains only year
-    if month is None and day is None and year:
-        if year > now.year:
-            return JsonResponse({'code': 500, 'message': 'Invalid year.'})
-        else:
-            date = {'year': year}
-
-    # URL contains year and month
+    
+    date = {}
+    if year and month and day:
+        date = {'year': year, 'month': month, 'day': day}
     elif day is None and month and year:
-        if year > now.year or month > now.month:
-            return JsonResponse({'code': 500, 'message': 'Invalid year or month.'})
-        else:
-            date = {'year': year, 'month': month}
+        date = {'year': year, 'month': month}
+    elif month is None and day is None and year:
+        date = {'year': year}
 
-    # URL contains year, month and day
-    elif year and month and day:
-        date_supplied = datetime.date(year, month, day)
-        if date_supplied > now.date():
-            return JsonResponse({'code': 500, 'message': 'Invalid date.'})
-        else:
-            date = {'year': year, 'month': month, 'day': day}
+    if date:
+        vendor_list = get_vendor_vends(start=None, end=None, date=date)
+    else:
+        _from = _from.split('-')
+        to = to.split('-')
 
-    vendor_list = get_vendor_vends(start=None, end=None, date=date)
+        start = datetime.date(int(_from[0]), int(_from[1]), int(_from[2]))
+        end = datetime.date(int(to[0]), int(to[1]), int(to[2]))
+
+        vendor_list = get_vendor_vends(start=start, end=end, date=None)
 
     return JsonResponse({'code': 200, 'results': {'vendors': vendor_list, 'voucher_values': settings.VOUCHER_VALUES}})
