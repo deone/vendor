@@ -55,7 +55,7 @@ def get_user_vends(request):
 
 @ensure_csrf_cookie
 def get_vends(request):
-    # _from and to should be in the 'yyyy-mm-dd' format.
+    # _from and to should be in the 'dd-mm-yyyy' format.
     year = request.GET.get('year', None)
     month = request.GET.get('month', None)
     day = request.GET.get('day', None)
@@ -83,10 +83,10 @@ def get_vends(request):
     else:
         _from = _from.split('-')
         to = to.split('-')
-
-        start = datetime.date(int(_from[0]), int(_from[1]), int(_from[2]))
-        end = datetime.date(int(to[0]), int(to[1]), int(to[2]))
-
+        
+        start = datetime.date(int(_from[2]), int(_from[1]), int(_from[0]))
+        end = datetime.date(int(to[2]), int(to[1]), int(to[0]))
+        
         vendor_list = get_vendor_vends(start=start, end=end, date=None)
 
     return JsonResponse({
