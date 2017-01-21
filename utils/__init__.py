@@ -56,20 +56,8 @@ def paginate(request, lst):
 
     return vends
 
-def get_active_vendors(start=None, end=None, date={}):
-    # Get vendors who made vends
-    if date is not None:
-        distinct_vendor_ids = set([v.vendor.pk for v in Vend.objects.all() if v.occurred(**date)])
-    else:
-        distinct_vendor_ids = set([v.vendor.pk for v in Vend.objects.all() if v.occurred_between(start, end)])
-
-    return [Vendor.objects.get(pk=pk) for pk in distinct_vendor_ids]
-
 def get_vendor_vends(start=None, end=None, date={}):
-    if date is not None:
-        vendors = get_active_vendors(start=None, end=None, date=date)
-    else:
-        vendors = get_active_vendors(start=start, end=end, date=None)
+    vendors = Vendor.objects.all()
 
     # Update each dictionary in list with vends count
     vendor_list = []
