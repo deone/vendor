@@ -44,7 +44,7 @@ def get_user_vends(request):
     if request.method == 'POST':
         pass
     else:
-        lst = Vend.objects.filter(vendor=request.user.vendor)
+        lst = Vend.objects.filter(vendor=request.user.vendor).order_by('-vend_date')
         if lst == []:
             context.update({'message': 'No vends found.'})
         else:
