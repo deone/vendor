@@ -74,13 +74,13 @@ class VendForm(forms.Form):
                     subscriber_message = loader.render_to_string('vend/sms_subscriber.txt', context)
                     subscriber_phone_number = '+233' + self.cleaned_data['phone_number'][1:]
                     params.update({'Content': subscriber_message, 'To': subscriber_phone_number})
-                    requests.get(settings.SMS_URL, params)
+                    # requests.get(settings.SMS_URL, params)
 
                     # Send recharge notification to vendor
                     vendor_message = loader.render_to_string('vend/sms_vendor.txt', context)
                     vendor_phone_number = '+233' + self.user.vendor.phone_number[1:]
                     params.update({'Content': vendor_message, 'To': vendor_phone_number})
-                    requests.get(settings.SMS_URL, params)
+                    # requests.get(settings.SMS_URL, params)
 
                 return recharge
 
