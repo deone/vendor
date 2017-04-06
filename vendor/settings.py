@@ -117,6 +117,8 @@ STATICFILES_DIRS = (
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static_live")
 
+LOGIN_REDIRECT_URL = '/'
+
 # VMS settings
 VMS_URL = "http://vms-deone.c9users.io/vouchers/"
 VOUCHER_GET_URL = VMS_URL + "get/"
