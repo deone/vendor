@@ -51,16 +51,16 @@ class VendForm(forms.Form):
                     'serial_no': serial_no,
                 })
 
-                Vend.objects.create(
-                    vendor=self.user.vendor,
-                    subscriber_phone_number=self.cleaned_data['phone_number'],
-                    voucher_id=serial_no,
-                    voucher_value=amount,
-                    voucher_type=self.voucher_type
-                    )
-
-                # Send sms notification to vendor and subscriber.
+                # Create vend entry and send sms notification to vendor and subscriber if topup was successful.
                 if recharge['code'] == 200:
+                    Vend.objects.create(
+                        vendor=self.user.vendor,
+                        subscriber_phone_number=self.cleaned_data['phone_number'],
+                        voucher_id=serial_no,
+                        voucher_value=amount,
+                        voucher_type=self.voucher_type
+                        )
+
                     context = {
                         'serial_no': zeropad(serial_no),
                         'pin': pin,
