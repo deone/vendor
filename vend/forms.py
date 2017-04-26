@@ -30,6 +30,13 @@ class VendForm(forms.Form):
         return phone_number
 
     def clean(self):
+        # Get (valid) voucher.
+        # If voucher is standard, do these:
+        # - Check whether account exists. If it doesn't, display message and exit.
+        # - If it does, recharge it.
+        # - If recharge succeeds, do these:
+        #   - Invalidate voucher.
+
         cleaned_data = super(VendForm, self).clean()
 
         # Get voucher
@@ -43,8 +50,6 @@ class VendForm(forms.Form):
                 'phone_number': cleaned_data.get('phone_number')
             })
 
-            cleaned_data.update({'account': account})
-
             # Recharge account
             recharge = self.get_info_or_display_error(settings.ACCOUNT_RECHARGE_URL, {
                 'username': account['username'],
@@ -53,6 +58,12 @@ class VendForm(forms.Form):
             })
 
             # Invalidate voucher
+            response = self.get_info_or_display_error(settings.VOUCHER_INVALIDATE_URL, {
+                'voucher_id': voucher['serial_no'],
+                'vendor_id': self.user.vendor.pk
+            })
+
+            cleaned_data.update({'voucher': voucher})
 
     def get_info_or_display_error(self, url, data):
         r = send_api_request(url, data)
@@ -64,24 +75,20 @@ class VendForm(forms.Form):
         return json
 
     def save(self):
-        print self.cleaned_data
-        # data = {'vendor_id': self.user.vendor.pk, 'voucher_type': self.voucher_type, 'value': self.cleaned_data['value'], 'phone_number': self.cleaned_data['phone_number']}
-        # Get (valid) voucher.
-        # If voucher is instant, download it and create vend entry.
-        # If voucher is standard, do these:
-        # - Check whether account exists. If it doesn't, display message and exit.
-        # - If it does, recharge it.
-        # - If recharge succeeds, do these:
-        #   - Invalidate voucher.
-        #   - Create vend entry.
-        #   - Send receipts.
+        # Create vend entry
+        Vend.objects.create(
+            vendor=self.user.vendor,
+            subscriber_phone_number=self.cleaned_data['phone_number'],
+            voucher_id=self.cleaned_data['voucher']['serial_no'],
+            voucher_value=self.cleaned_data['value'],
+            voucher_type=self.voucher_type
+        )
+
+        # Send receipts - use signals on Vend model.
 
         if self.voucher_type == 'INS':
+            # Download voucher if voucher type is instant
             pass
-        else:
-            pass
-            # Create vend entry
-            # Send receipts - use signals on Vend model.
 
         """ # Get voucher from VMS
         response = send_api_request(url, data)
