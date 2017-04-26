@@ -42,7 +42,7 @@ def send_api_request(url, data):
           cookies=get_response.cookies
         )
 
-    return post_response.json()
+    return post_response
 
 def paginate(request, lst):
     paginator = Paginator(lst, settings.VENDS_PER_PAGE)

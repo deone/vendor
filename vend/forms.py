@@ -3,6 +3,7 @@ from django.conf import settings
 from django.utils import timezone
 from django.template import loader
 from django.http import HttpResponse
+from django.utils.translation import ugettext as _
 
 from utils import send_api_request, write_vouchers, file_generator, zeropad
 
@@ -28,11 +29,49 @@ class VendForm(forms.Form):
 
         return phone_number
 
-    def save(self):
-        url = settings.VOUCHER_GET_URL
-        data = {'vendor_id': self.user.vendor.pk, 'voucher_type': self.voucher_type, 'value': self.cleaned_data['value']}
+    def get_info_or_display_error(self, url, data):
+        r = send_api_request(url, data)
+        json = r.json()
 
-        # Get voucher from VMS
+        if r.status_code != 200:
+            raise forms.ValidationError(_(json['message']), code=_(json['code']))
+
+        return json
+
+    def save(self):
+        # data = {'vendor_id': self.user.vendor.pk, 'voucher_type': self.voucher_type, 'value': self.cleaned_data['value'], 'phone_number': self.cleaned_data['phone_number']}
+        # Get valid voucher.
+        # If voucher is instant, download it and create vend entry.
+        # If voucher is standard, do these:
+        # - Check whether account exists. If it doesn't, display message and exit.
+        # - If it does, recharge it.
+        # - If recharge succeeds, do these:
+        #   - Invalidate voucher and mark as sold.
+        #   - Send receipts via SMS.
+        #   - Create vend entry.
+
+        # Get voucher
+        voucher = self.get_info_or_display_error(settings.VOUCHER_GET_URL, {
+            'voucher_type': self.voucher_type, 'value': self.cleaned_data['value']
+        })
+
+        if self.voucher_type == 'INS':
+            pass
+        else:
+            # Get account
+            account = self.get_info_or_display_error(settings.ACCOUNT_GET_URL, {
+                'phone_number': self.cleaned_data['phone_number']
+            })
+
+            # Recharge account
+            recharge = self.get_info_or_display_error(settings.ACCOUNT_RECHARGE_URL, {
+                'username': account['username'],
+                'amount': self.cleaned_data['value'],
+                'serial_no': voucher['serial_no']
+            })
+            print recharge
+
+        """ # Get voucher from VMS
         response = send_api_request(url, data)
         pin = response['results'][0][1]
 
@@ -104,4 +143,4 @@ class VendForm(forms.Form):
             voucher_type=self.voucher_type
             )
 
-        return download
+        return download """

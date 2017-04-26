@@ -121,7 +121,7 @@ LOGIN_REDIRECT_URL = '/'
 
 # VMS settings
 VMS_URL = "http://vms-deone.c9users.io/vouchers/"
-VOUCHER_GET_URL = VMS_URL + "get/"
+VOUCHER_GET_URL = VMS_URL + "get"
 VOUCHER_VALUES_URL = VMS_URL + "values/"
 VOUCHER_REDEEM_URL = VMS_URL + "redeem/"
 VOUCHER_STUB_INSERT_URL = VMS_URL + "insert/"
@@ -132,7 +132,8 @@ VENDS_PER_PAGE = 15
 
 # Billing settings
 BILLING_URL = "http://billing-deone.c9users.io/"
-ACCOUNT_RECHARGE_URL = BILLING_URL + "accounts/topup/"
+ACCOUNT_GET_URL = BILLING_URL + 'accounts/get'
+ACCOUNT_RECHARGE_URL = BILLING_URL + 'accounts/recharge'
 ACCOUNT_CREATE_URL = BILLING_URL + "accounts/create_test/"
 
 # SMS settings - SMSGH
@@ -144,7 +145,6 @@ SMS_PARAMS = {
     'RegisteredDelivery': 'true'
 }
 
-TOPUP_ACCOUNT = True
 VOUCHER_TYPES = ['STD', 'INS']
 VOUCHER_VALUES = [1, 2, 5, 10, 20]
 VOUCHER_TYPES_MAP = {
