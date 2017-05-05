@@ -1,8 +1,5 @@
 from settings import *
 
-IP = '154.117.8.19'
-ALLOWED_HOSTS = [IP]
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -18,7 +15,7 @@ DATABASES = {
 }
 
 # VMS settings
-VMS_URL = "http://" + IP + ":8090/vouchers/"
+VMS_URL = "http://154.117.12.5:8080/vouchers/"
 VOUCHER_GET_URL = VMS_URL + "get/"
 VOUCHER_VALUES_URL = VMS_URL + "values/"
 VOUCHER_REDEEM_URL = VMS_URL + "redeem/"

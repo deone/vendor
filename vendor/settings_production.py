@@ -2,11 +2,8 @@ from settings import *
 
 DEBUG = False
 
-IP = '154.117.8.18'
-ALLOWED_HOSTS = [IP]
-
 # VMS settings
-VMS_URL = "http://" + IP + ":8090/vouchers/"
+VMS_URL = "http://154.117.12.5/vouchers/"
 VOUCHER_GET_URL = VMS_URL + "get/"
 VOUCHER_VALUES_URL = VMS_URL + "values/"
 VOUCHER_REDEEM_URL = VMS_URL + "redeem/"
