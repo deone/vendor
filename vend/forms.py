@@ -34,8 +34,7 @@ class VendForm(forms.Form):
         # If voucher is standard, do these:
         # - Check whether account exists. If it doesn't, display message and exit.
         # - If it does, recharge it.
-        # - If recharge succeeds, do these:
-        #   - Invalidate voucher.
+        # - If recharge succeeds, invalidate voucher.
 
         cleaned_data = super(VendForm, self).clean()
 
@@ -63,7 +62,7 @@ class VendForm(forms.Form):
                 'vendor_id': self.user.vendor.pk
             })
 
-            cleaned_data.update({'voucher': voucher})
+        cleaned_data.update({'voucher': voucher})
 
     def get_info_or_display_error(self, url, data):
         r = send_api_request(url, data)

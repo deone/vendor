@@ -124,7 +124,6 @@ VMS_URL = "http://vms-deone.c9users.io/vouchers/"
 VOUCHER_GET_URL = VMS_URL + "get"
 VOUCHER_INVALIDATE_URL = VMS_URL + "invalidate"
 VOUCHER_VALUES_URL = VMS_URL + "values/"
-# VOUCHER_REDEEM_URL = VMS_URL + "redeem/"
 VOUCHER_STUB_INSERT_URL = VMS_URL + "insert/"
 VOUCHER_STUB_DELETE_URL = VMS_URL + "delete/"
 VOUCHER_DOWNLOAD_PATH = os.path.join(BASE_DIR, 'downloads')
