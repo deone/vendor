@@ -25,7 +25,7 @@ SECRET_KEY = 'sz%v&-pi15-+u&501z&!8jjo2v*i3a-fd9^&!6iyadp$y(b7#j'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['vendor-deone.c9users.io']
 
 
 # Application definition
@@ -83,7 +83,10 @@ DATABASES = {
         'USER': 'vendor',
         'PASSWORD': 'v3nDpASs',
         'HOST': '127.0.0.1',
-        'PORT': '3306'
+        'PORT': '3306',
+        'OPTIONS': {
+            'sql_mode': 'traditional',
+        }
     }
 }
 
@@ -112,27 +115,26 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
 
-# quantity choices
-ONE = 1
-TWO = 2
-THREE = 3
-FOUR = 4
-FIVE = 5
-
-QUANTITY_CHOICES = (
-    ('', 'Select Quantity'),
-    (ONE, '1'),
-    (TWO, '2'),
-    (THREE, '3'),
-    (FOUR, '4'),
-    (FIVE, '5'),
-)
-
 STATIC_ROOT = os.path.join(BASE_DIR, "static_live")
 
+LOGIN_REDIRECT_URL = '/'
+
+# VMS settings
+VMS_URL = "http://vms-deone.c9users.io/vouchers/"
+VOUCHER_GET_URL = VMS_URL + "get"
+VOUCHER_INVALIDATE_URL = VMS_URL + "invalidate"
+VOUCHER_VALUES_URL = VMS_URL + "values/"
+VOUCHER_STUB_INSERT_URL = VMS_URL + "insert/"
+VOUCHER_STUB_DELETE_URL = VMS_URL + "delete/"
 VOUCHER_DOWNLOAD_PATH = os.path.join(BASE_DIR, 'downloads')
-VEND_QUANTITY = 1
+
 VENDS_PER_PAGE = 15
+
+# Billing settings
+BILLING_URL = "http://billing-deone.c9users.io/"
+ACCOUNT_GET_URL = BILLING_URL + 'accounts/get'
+ACCOUNT_RECHARGE_URL = BILLING_URL + 'accounts/recharge'
+ACCOUNT_CREATE_URL = BILLING_URL + "accounts/create_test/"
 
 # SMS settings - SMSGH
 SMS_URL = 'https://api.smsgh.com/v3/messages/send'
@@ -143,9 +145,11 @@ SMS_PARAMS = {
     'RegisteredDelivery': 'true'
 }
 
-# Twilio Settings
-# TWILIO_ACCOUNT_SID = 'ACe0325806bc5842a1f96a115e8c21a384'
-# TWILIO_AUTH_TOKEN = '90bd6b99b70d51d97d637a98e33ce8a7'
-# TWILIO_NUMBER = '+18177569348'
+VOUCHER_TYPES = ['STD', 'INS']
+VOUCHER_VALUES = [1, 2, 5, 10, 20]
+VOUCHER_TYPES_MAP = {
+    'INS': 'Instant',
+    'STD': 'Standard'
+}
 
 PHONE_NUMBER_PREFIXES = ['020', '023', '024', '026', '027', '028', '050', '052', '054', '055', '056', '057']

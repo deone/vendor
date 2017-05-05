@@ -1,31 +1,32 @@
-{% extends 'vend/vend_instant.html' %}
+{% extends 'base.html' %}
 
-{% block title %}Vend Voucher{% endblock %}
+{% block title %}Vend Standard Vouchers{% endblock %}
 
 {% block app_body %}
 <div class="row">
   <form method="post" action="" class="vend-form">
-    <fieldset>
+    {% block form_header %}
       <div class="page-header">
         <h1>Vend Voucher</h1>
       </div>
-      {% csrf_token %}
-      {{ form.non_field_errors }}
+    {% endblock %}
 
-      <div class="form-group">
-        {{ form.value.errors }}
-        <label for="{{ form.value.id_for_label }}">{{ form.value.label }}</label>
-        {{ form.value }}
-      </div>
+    {% csrf_token %}
+    {{ form.non_field_errors }}
 
-      <div class="form-group">
-        {{ form.phone_number.errors }}
-        <label for="{{ form.phone_number.id_for_label }}">{{ form.phone_number.label }}</label>
-        {{ form.phone_number }}
-      </div>
+    <div class="form-group">
+      {{ form.value.errors }}
+      <label for="{{ form.value.id_for_label }}">{{ form.value.label }}</label>
+      {{ form.value }}
+    </div>
 
-      <button type="submit" class="btn btn-primary">Vend</button>
-    </fieldset>
+    <div class="form-group">
+      {{ form.phone_number.errors }}
+      <label for="{{ form.phone_number.id_for_label }}">{{ form.phone_number.label }}</label>
+      {{ form.phone_number }}
+    </div>
+
+    <button type="submit" class="btn btn-primary">Vend</button>
   </form>
 </div>
 {% endblock %}

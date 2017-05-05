@@ -74,6 +74,5 @@ class ViewsTests(TestCase):
 
         self.check_response(response, 'Account does not exist.', lst)
 
-    def tearDown(self):
-        send_api_request(settings.VOUCHER_STUB_DELETE_URL, data={'voucher_id': self.voucher_one['id'], 'voucher_type': 'STD'})
-        send_api_request(settings.VOUCHER_STUB_DELETE_URL, data={'voucher_id': self.voucher_two['id'], 'voucher_type': 'STD'})
+        self.assertEqual(response['Content-Type'], 'text/plain')
+        self.assertNotEqual(response.content, '')
