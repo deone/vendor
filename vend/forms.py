@@ -74,20 +74,25 @@ class VendForm(forms.Form):
         return json
 
     def save(self):
+        voucher = self.cleaned_data['voucher']
+
         # Create vend entry
         Vend.objects.create(
             vendor=self.user.vendor,
             subscriber_phone_number=self.cleaned_data['phone_number'],
-            voucher_id=self.cleaned_data['voucher']['serial_no'],
+            voucher_id=voucher['serial_no'],
             voucher_value=self.cleaned_data['value'],
             voucher_type=self.voucher_type
         )
 
-        # Send receipts - use signals on Vend model.
-
         if self.voucher_type == 'INS':
             # Download voucher if voucher type is instant
             pass
+        else:
+            # Send receipts - use signals on Vend model.
+
+            # Return voucher
+            return self.cleaned_data['voucher']
 
         """ # Get voucher from VMS
         response = send_api_request(url, data)
