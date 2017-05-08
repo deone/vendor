@@ -115,26 +115,26 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
 
-STATIC_ROOT = os.path.join(BASE_DIR, "static_live")
+STATIC_ROOT = os.path.join(BASE_DIR, 'static_live')
 
 LOGIN_REDIRECT_URL = '/'
 
 # VMS settings
-VMS_URL = "http://vms-deone.c9users.io/vouchers/"
-VOUCHER_GET_URL = VMS_URL + "get"
-VOUCHER_INVALIDATE_URL = VMS_URL + "invalidate"
-VOUCHER_VALUES_URL = VMS_URL + "values/"
-VOUCHER_STUB_INSERT_URL = VMS_URL + "insert/"
-VOUCHER_STUB_DELETE_URL = VMS_URL + "delete/"
+VMS_URL = 'http://vms-deone.c9users.io/vouchers/'
+VOUCHER_GET_URL = VMS_URL + 'get'
+VOUCHER_INVALIDATE_URL = VMS_URL + 'invalidate'
+VOUCHER_VALUES_URL = VMS_URL + 'values/'
+VOUCHER_STUB_INSERT_URL = VMS_URL + 'insert/'
+VOUCHER_STUB_DELETE_URL = VMS_URL + 'delete/'
 VOUCHER_DOWNLOAD_PATH = os.path.join(BASE_DIR, 'downloads')
 
 VENDS_PER_PAGE = 15
 
 # Billing settings
-BILLING_URL = "http://billing-deone.c9users.io/"
+BILLING_URL = 'http://billing-deone.c9users.io/'
 ACCOUNT_GET_URL = BILLING_URL + 'accounts/get'
 ACCOUNT_RECHARGE_URL = BILLING_URL + 'accounts/recharge'
-ACCOUNT_CREATE_URL = BILLING_URL + "accounts/create_test/"
+ACCOUNT_CREATE_URL = BILLING_URL + 'accounts/create_test/'
 
 # SMS settings - SMSGH
 SMS_URL = 'https://api.smsgh.com/v3/messages/send'
