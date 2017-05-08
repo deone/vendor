@@ -11,10 +11,7 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-if 'test' in os.getcwd():
-    settings_file = 'vendor.settings_test'
-else:
-    settings_file = 'vendor.settings_production'
+settings_file = 'vendor.settings_test'
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", settings_file)
 
