@@ -38,7 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'accounts',
-    'vend',
+    'vend.apps.VendConfig',
 )
 
 MIDDLEWARE_CLASSES = (

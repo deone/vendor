@@ -1,6 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import User
 from django.utils import timezone
+from django.contrib.auth.models import User
 
 class Vendor(models.Model):
     user = models.OneToOneField(User)
@@ -35,7 +35,7 @@ class Vend(models.Model):
     voucher_value = models.DecimalField(max_digits=4, decimal_places=2)
     voucher_type = models.CharField(max_length=3, choices=TYPE_CHOICES)
     vend_date = models.DateTimeField(default=timezone.now)
-    
+
     def occurred(self, **kwargs):
         year = kwargs.get('year', None)
         month = kwargs.get('month', None)

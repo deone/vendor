@@ -21,7 +21,7 @@ def index(request, template=None, prices=None, voucher_type=None):
         if form.is_valid():
             response = form.save()
             if response:
-                messages.success(request, 'Vend successful')
+                messages.success(request, 'Vend successful.')
                 return redirect('vend:standard')
     else:
         form = VendForm(prices=prices, voucher_type=voucher_type)

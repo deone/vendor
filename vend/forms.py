@@ -1,15 +1,12 @@
 from django import forms
 from django.conf import settings
 from django.utils import timezone
-from django.template import loader
 from django.http import HttpResponse
 from django.utils.translation import ugettext as _
 
 from utils import send_api_request, write_vouchers, file_generator, zeropad
 
 from .models import Vend
-
-import requests
 
 class VendForm(forms.Form):
     phone_number = forms.CharField(label='Phone Number', max_length=10, widget=forms.TextInput(attrs={'class': 'form-control'}))
