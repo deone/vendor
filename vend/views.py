@@ -22,7 +22,10 @@ def index(request, template=None, prices=None, voucher_type=None):
             response = form.save()
             if response:
                 messages.success(request, 'Vend successful.')
-                return redirect('vend:standard')
+                if 'serial_no' in response:
+                    return redirect('vend:standard')
+                else:
+                    return response
     else:
         form = VendForm(prices=prices, voucher_type=voucher_type)
 

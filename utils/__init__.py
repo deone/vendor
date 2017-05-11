@@ -25,11 +25,8 @@ def zeropad(num):
 
 def write_vouchers(voucher_list, _file):
     for v in voucher_list:
-        with open(_file, 'a') as f:
-            if len(v) == 2:
-                f.write(zeropad(v[0]) + ',' + v[1] + '\r\n')
-            else:
-                f.write(zeropad(v[0]) + ',' + v[1] + ',' + v[2] + '\r\n')
+        with open(_file, 'w') as f:
+            f.write(zeropad(v['serial_no']) + ',' + v['username'] + ',' + v['password'] + '\r\n')
 
     return f
 

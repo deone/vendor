@@ -4,7 +4,7 @@ from django.utils import timezone
 from django.http import HttpResponse
 from django.utils.translation import ugettext as _
 
-from utils import send_api_request, write_vouchers, file_generator, zeropad
+from utils import send_api_request, file_generator, write_vouchers
 
 from .models import Vend
 
@@ -84,10 +84,19 @@ class VendForm(forms.Form):
 
         if self.voucher_type == 'INS':
             # Download voucher if voucher type is instant
-            pass
+            file_name = 'Vouchers_Instant_'
+
+            # Write vouchers to file and return download
+            file_name += timezone.now().strftime('%d-%m-%Y_%I:%M') + '.txt'
+            _file = settings.VOUCHER_DOWNLOAD_PATH + '/' + file_name
+
+            f = write_vouchers([voucher], _file)
+            download = HttpResponse(file_generator(f), content_type='text/plain')
+            download['Content-Disposition'] = 'attachment; filename="%s"' % file_name
+
+            return download
         else:
             # Send receipts - use signals on Vend model.
-
             # Return voucher
             return self.cleaned_data['voucher']
 
@@ -141,26 +150,4 @@ class VendForm(forms.Form):
                     params.update({'Content': vendor_message, 'To': vendor_phone_number})
                     # requests.get(settings.SMS_URL, params)
 
-                return recharge
-
-        elif self.voucher_type == 'INS':
-            file_name = 'Vouchers_Instant_'
-
-        # Write vouchers to file and return download
-        file_name += timezone.now().strftime('%d-%m-%Y_%I:%M') + '.txt'
-        _file = settings.VOUCHER_DOWNLOAD_PATH + '/' + file_name
-
-        f = write_vouchers(response['results'], _file)
-
-        download = HttpResponse(file_generator(f), content_type='text/plain')
-        download['Content-Disposition'] = 'attachment; filename="%s"' % file_name
-
-        Vend.objects.create(
-            vendor=self.user.vendor,
-            subscriber_phone_number=self.cleaned_data['phone_number'],
-            voucher_id=response['results'][0][0],
-            voucher_value=self.cleaned_data['value'],
-            voucher_type=self.voucher_type
-            )
-
-        return download """
+                return recharge """
