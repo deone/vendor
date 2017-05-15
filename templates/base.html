@@ -33,7 +33,7 @@
                 </a>
                 <ul class="dropdown-menu">
                   <li><a href="{% url 'vend:standard' %}">Standard</a></li>
-                  {% if 'INS' in voucher_types %}
+                  {% if 'INS' in view.voucher_types %}
                     <li><a href="{% url 'vend:instant' %}">Instant</a></li>
                   {% endif %}
                 </ul>

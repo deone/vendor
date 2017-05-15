@@ -14,41 +14,28 @@ from utils import write_vouchers, get_price_choices, paginate, get_vendor_vends
 
 import datetime
 
-class StandardVendView(FormView):
+class VendView(FormView):
     form_class = VendForm
     template_name = 'vend/vend_standard.html'
+    voucher_type = 'STD'
 
     def get_form_kwargs(self):
-        voucher_type = 'STD'
-        kwargs = super(StandardVendView, self).get_form_kwargs()
-        kwargs['voucher_type'] = voucher_type
-        kwargs['prices'] = get_price_choices(voucher_type)
+        kwargs = super(VendView, self).get_form_kwargs()
+        kwargs['voucher_type'] = self.voucher_type
+        kwargs['prices'] = get_price_choices(self.voucher_type)
         kwargs['user'] = self.request.user
         return kwargs
 
+    def voucher_types(self):
+        return settings.VOUCHER_TYPES
+
     def form_valid(self, form):
-        form.save()
-        messages.success(self.request, 'Vend successful.')
-        return redirect('vend:standard')
-
-@login_required
-def index(request, template=None, prices=None, voucher_type=None):
-    context = {}
-    if request.method == 'POST':
-        form = VendForm(request.POST, user=request.user, prices=prices, voucher_type=voucher_type)
-        if form.is_valid():
-            response = form.save()
-            if response:
-                messages.success(request, 'Vend successful.')
-                if 'serial_no' in response:
-                    return redirect('vend:standard')
-                else:
-                    return response
-    else:
-        form = VendForm(prices=prices, voucher_type=voucher_type)
-
-    context.update({'form': form, 'voucher_types': settings.VOUCHER_TYPES})
-    return render(request, template, context)
+        response = form.save()
+        if self.voucher_type == 'STD':
+            messages.success(self.request, 'Vend successful.')
+            return redirect('vend:standard')
+        else:
+            return response
 
 @login_required
 def get_user_vends(request):
