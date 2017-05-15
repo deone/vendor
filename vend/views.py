@@ -17,6 +17,7 @@ import datetime
 class StandardVendView(FormView):
     form_class = VendForm
     template_name = 'vend/vend_standard.html'
+    success_url = '/'
 
     def get_form_kwargs(self):
         voucher_type = 'STD'
