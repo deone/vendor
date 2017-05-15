@@ -8,7 +8,85 @@ from utils import send_api_request, file_generator, write_vouchers
 
 from .models import Vend
 
-class VendForm(forms.Form):
+class VendForm(forms.ModelForm):
+    class Meta:
+        model = Vend
+        fields = ['voucher_value', 'subscriber_phone_number']
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        self.vendor = user.vendor
+        self.voucher_type = kwargs.pop('voucher_type', None)
+        prices = kwargs.pop('prices', None)
+
+        super(VendForm, self).__init__(*args, **kwargs)
+        self.label_suffix = ''
+        self.fields['voucher_value'] = forms.ChoiceField(label=_('Value'),
+            choices=prices, widget=forms.Select(attrs={'class': 'form-control'}))
+        self.fields['subscriber_phone_number'] = forms.CharField(label=_('Phone Number'),
+            max_length=10, widget=forms.TextInput(attrs={'class': 'form-control'}))
+
+    def clean_phone_number(self):
+        cleaned_data = super(StandardVendForm, self).clean()
+        phone_number = cleaned_data.get('phone_number')
+        if phone_number[:3] not in settings.PHONE_NUMBER_PREFIXES:
+            raise forms.ValidationError('Provide a valid phone number.', code='number_invalid')
+
+        return phone_number
+
+    def clean(self):
+        # Get (valid) voucher.
+        # If voucher is standard, do these:
+        # - Check whether account exists. If it doesn't, display message and exit.
+        # - If it does, recharge it.
+        # - If recharge succeeds, invalidate voucher.
+
+        cleaned_data = super(VendForm, self).clean()
+
+        # Get voucher
+        voucher = self.get_info_or_display_error(settings.VOUCHER_GET_URL, {
+            'voucher_type': self.voucher_type,
+            'value': cleaned_data.get('voucher_value')
+        })
+
+        if self.voucher_type == 'STD':
+            # Get account
+            account = self.get_info_or_display_error(settings.ACCOUNT_GET_URL, {
+                'phone_number': cleaned_data.get('subscriber_phone_number')
+            })
+    
+            # Recharge account
+            recharge = self.get_info_or_display_error(settings.ACCOUNT_RECHARGE_URL, {
+                'username': account['username'],
+                'amount': cleaned_data.get('voucher_value'),
+                'serial_no': voucher['serial_no']
+            })
+
+        # Invalidate voucher
+        response = self.get_info_or_display_error(settings.VOUCHER_INVALIDATE_URL, {
+            'voucher_id': voucher['serial_no'],
+            'vendor_id': self.vendor.pk,
+            'voucher_type': self.voucher_type
+        })
+
+        cleaned_data.update({'voucher': voucher})
+
+    def get_info_or_display_error(self, url, data):
+        r = send_api_request(url, data)
+        json = r.json()
+
+        if r.status_code != 200:
+            raise forms.ValidationError(_(json['message']), code=_(json['code']))
+
+        return json
+
+    def save(self, commit=True):
+        voucher = self.cleaned_data['voucher']
+        self.instance.voucher_id = voucher['serial_no']
+        self.instance.vendor = self.vendor
+        return super(VendForm, self).save(commit)
+
+""" class VendForm(forms.Form):
     phone_number = forms.CharField(label='Phone Number', max_length=10, widget=forms.TextInput(attrs={'class': 'form-control'}))
 
     def __init__(self, *args, **kwargs):
@@ -99,4 +177,4 @@ class VendForm(forms.Form):
         else:
             # Send receipts - use signals on Vend model.
             # Return voucher
-            return self.cleaned_data['voucher']
+            return self.cleaned_data['voucher'] """

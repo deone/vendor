@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
 
-{% block title %}Vend Standard Vouchers{% endblock %}
+{% block title %}Vend Standard Voucher{% endblock %}
 
 {% block app_body %}
 <div class="row">
   <form method="post" action="" class="vend-form">
     {% block form_header %}
       <div class="page-header">
-        <h1>Vend Voucher</h1>
+        <h1>Vend Standard Voucher</h1>
       </div>
     {% endblock %}
 
@@ -15,16 +15,18 @@
     {{ form.non_field_errors }}
 
     <div class="form-group">
-      {{ form.value.errors }}
-      <label for="{{ form.value.id_for_label }}">{{ form.value.label }}</label>
-      {{ form.value }}
+      {{ form.voucher_value.errors }}
+      {{ form.voucher_value.label_tag }}
+      {{ form.voucher_value }}
     </div>
 
+    {% block phone_number_field %}
     <div class="form-group">
-      {{ form.phone_number.errors }}
-      <label for="{{ form.phone_number.id_for_label }}">{{ form.phone_number.label }}</label>
-      {{ form.phone_number }}
+      {{ form.subscriber_phone_number.errors }}
+      {{ form.subscriber_phone_number.label_tag }}
+      {{ form.subscriber_phone_number }}
     </div>
+    {% endblock %}
 
     <button type="submit" class="btn btn-primary">Vend</button>
   </form>
