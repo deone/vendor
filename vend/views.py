@@ -17,7 +17,6 @@ import datetime
 class StandardVendView(FormView):
     form_class = VendForm
     template_name = 'vend/vend_standard.html'
-    success_url = '/'
 
     def get_form_kwargs(self):
         voucher_type = 'STD'
@@ -26,6 +25,11 @@ class StandardVendView(FormView):
         kwargs['prices'] = get_price_choices(voucher_type)
         kwargs['user'] = self.request.user
         return kwargs
+
+    def form_valid(self, form):
+        form.save()
+        messages.success(self.request, 'Vend successful.')
+        return redirect('vend:standard')
 
 @login_required
 def index(request, template=None, prices=None, voucher_type=None):
