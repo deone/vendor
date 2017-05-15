@@ -53,11 +53,12 @@ class VendForm(forms.Form):
                 'serial_no': voucher['serial_no']
             })
 
-            # Invalidate voucher
-            response = self.get_info_or_display_error(settings.VOUCHER_INVALIDATE_URL, {
-                'voucher_id': voucher['serial_no'],
-                'vendor_id': self.user.vendor.pk
-            })
+        # Invalidate voucher
+        response = self.get_info_or_display_error(settings.VOUCHER_INVALIDATE_URL, {
+            'voucher_id': voucher['serial_no'],
+            'vendor_id': self.user.vendor.pk,
+            'voucher_type': self.voucher_type
+        })
 
         cleaned_data.update({'voucher': voucher})
 
