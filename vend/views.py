@@ -1,10 +1,11 @@
-from django.shortcuts import render, redirect
-from django.contrib import messages
-from django.utils import timezone
 from django.conf import settings
+from django.utils import timezone
+from django.contrib import messages
+from django.http import JsonResponse
+from django.shortcuts import render, redirect
+from django.views.generic.edit import FormView
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import ensure_csrf_cookie
-from django.http import JsonResponse
 
 from .forms import VendForm
 from .models import Vend, Vendor
@@ -12,6 +13,18 @@ from .models import Vend, Vendor
 from utils import write_vouchers, get_price_choices, paginate, get_vendor_vends
 
 import datetime
+
+class StandardVendView(FormView):
+    form_class = VendForm
+    template_name = 'vend/vend_standard.html'
+
+    def get_form_kwargs(self):
+        voucher_type = 'STD'
+        kwargs = super(StandardVendView, self).get_form_kwargs()
+        kwargs['voucher_type'] = voucher_type
+        kwargs['prices'] = get_price_choices(voucher_type)
+        kwargs['user'] = self.request.user
+        return kwargs
 
 @login_required
 def index(request, template=None, prices=None, voucher_type=None):

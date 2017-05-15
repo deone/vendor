@@ -2,11 +2,13 @@ from django.conf.urls import url
 from django.conf import settings
 
 from . import views
-from utils import get_price_choices
+# from utils import get_price_choices
 
-urlpatterns = []
+urlpatterns = [
+    url(r'^$', views.StandardVendView.as_view(), {}, name='standard'),
+]
 
-if 'STD' in settings.VOUCHER_TYPES:
+""" if 'STD' in settings.VOUCHER_TYPES:
     urlpatterns += [
         url(r'^$', views.index,
         {
@@ -26,7 +28,7 @@ if 'INS' in settings.VOUCHER_TYPES:
             'voucher_type': 'INS',
         },
         name='instant'),
-    ]
+    ] """
 
 urlpatterns += [
     url(r'^vends/$', views.get_user_vends, name='user_vends'),
