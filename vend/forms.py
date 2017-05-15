@@ -26,14 +26,6 @@ class VendForm(forms.ModelForm):
         self.fields['subscriber_phone_number'] = forms.CharField(label=_('Phone Number'),
             max_length=10, widget=forms.TextInput(attrs={'class': 'form-control'}))
 
-    def clean_phone_number(self):
-        cleaned_data = super(StandardVendForm, self).clean()
-        phone_number = cleaned_data.get('phone_number')
-        if phone_number[:3] not in settings.PHONE_NUMBER_PREFIXES:
-            raise forms.ValidationError('Provide a valid phone number.', code='number_invalid')
-
-        return phone_number
-
     def clean(self):
         # Get (valid) voucher.
         # If voucher is standard, do these:
@@ -42,6 +34,10 @@ class VendForm(forms.ModelForm):
         # - If recharge succeeds, invalidate voucher.
 
         cleaned_data = super(VendForm, self).clean()
+
+        phone_number = cleaned_data.get('subscriber_phone_number')
+        if phone_number[:3] not in settings.PHONE_NUMBER_PREFIXES:
+            raise forms.ValidationError('Provide a valid phone number.', code='number_invalid')
 
         # Get voucher
         voucher = self.get_info_or_display_error(settings.VOUCHER_GET_URL, {
@@ -84,6 +80,7 @@ class VendForm(forms.ModelForm):
         voucher = self.cleaned_data['voucher']
         self.instance.voucher_id = voucher['serial_no']
         self.instance.vendor = self.vendor
+        self.instance.voucher_type = self.voucher_type
         return super(VendForm, self).save(commit)
 
 """ class VendForm(forms.Form):
