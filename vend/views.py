@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.views.generic.edit import FormView
+from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import ensure_csrf_cookie
 
@@ -18,6 +19,10 @@ class VendView(FormView):
     form_class = VendForm
     template_name = 'vend/vend_standard.html'
     voucher_type = 'STD'
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(VendView, self).dispatch(*args, **kwargs)
 
     def get_form_kwargs(self):
         kwargs = super(VendView, self).get_form_kwargs()
