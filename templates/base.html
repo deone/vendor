@@ -62,6 +62,7 @@
       {% endblock %}
     </div>
     
+    {% block disable_button %}
     <script type="text/javascript">
       $('form').submit(function() {
         var btn = $(this).find('.btn');
@@ -69,6 +70,7 @@
         btn.prop('disabled', true);
       });
     </script>
+    {% endblock %}
 
   </body>
 </html>
