@@ -2,10 +2,20 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
 
+INSTANT = 'INS'
+STANDARD = 'STD'
+
+TYPE_CHOICES = (
+    ('', 'Select Type'),
+    (STANDARD, 'Standard'),
+    (INSTANT, 'Instant'),
+)
+
 class Vendor(models.Model):
     user = models.OneToOneField(User)
     phone_number = models.CharField(max_length=10)
     company_name = models.CharField(max_length=50)
+    voucher_type = models.CharField(max_length=3, choices=TYPE_CHOICES)
     
     def __str__(self):
         return '%s, %s' % (self.user.get_full_name(), self.company_name)
@@ -19,16 +29,6 @@ class Vendor(models.Model):
         }
 
 class Vend(models.Model):
-
-    INSTANT = 'INS'
-    STANDARD = 'STD'
-
-    TYPE_CHOICES = (
-        ('', 'Select Type'),
-        (STANDARD, 'Standard'),
-        (INSTANT, 'Instant'),
-    )
-
     vendor = models.ForeignKey(Vendor)
     subscriber_phone_number = models.CharField(max_length=10, null=True)
     voucher_id = models.PositiveSmallIntegerField(null=True)
