@@ -31,9 +31,6 @@ class VendView(FormView):
         kwargs['user'] = self.request.user
         return kwargs
 
-    def voucher_types(self):
-        return settings.VOUCHER_TYPES
-
     def form_valid(self, form):
         response = form.save()
         if self.voucher_type == 'STD':
