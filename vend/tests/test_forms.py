@@ -1,13 +1,13 @@
-from django.test import SimpleTestCase
+from django.test import TestCase
 from django.contrib.auth.models import User
 from django.conf import settings
 
 from ..helpers import get_price_choices, send_api_request
-from ..forms import VendStandardVoucherForm
+from ..forms import VendForm
 
 from ..models import Vendor
 
-class VendStandardVoucherFormTest(SimpleTestCase):
+class VendFormTest(TestCase):
 
     def setUp(self):
         # Create test voucher
@@ -20,13 +20,13 @@ class VendStandardVoucherFormTest(SimpleTestCase):
         prices = get_price_choices('STD')
 
         data = {'phone_number': '0001234567', 'value': '5'}
-        form = VendStandardVoucherForm(data, user=self.user, prices=prices)
+        form = VendForm(data, user=self.user, prices=prices)
         
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors['phone_number'][0], 'Provide a valid phone number.')
         
         data = {'phone_number': '0543751610', 'value': '5'}
-        form = VendStandardVoucherForm(data, user=self.user, prices=prices)
+        form = VendForm(data, user=self.user, prices=prices)
         
         self.assertTrue(form.is_valid())
         self.assertEqual(form.errors, {})
@@ -40,7 +40,7 @@ class VendStandardVoucherFormTest(SimpleTestCase):
 
         # Vend
         data = {'phone_number': '0231802940', 'value': '5'}
-        form = VendStandardVoucherForm(data, user=self.user, prices=prices)
+        form = VendForm(data, user=self.user, prices=prices)
 
         # Test
         self.assertTrue(form.is_valid())
@@ -54,7 +54,7 @@ class VendStandardVoucherFormTest(SimpleTestCase):
 
         # Vend
         data = {'phone_number': '0544433333', 'value': '5'}
-        form = VendStandardVoucherForm(data, user=self.user, prices=prices)
+        form = VendForm(data, user=self.user, prices=prices)
 
         # Test
         self.assertTrue(form.is_valid())
