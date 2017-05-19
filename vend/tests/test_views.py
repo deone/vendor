@@ -8,7 +8,7 @@ from django.conf import settings
 
 from ..forms import VendForm
 from ..models import Vendor
-from ..views import VendView
+from ..views import STDVendView, INSVendView
 from ..helpers import send_api_request, get_price_choices
 
 class VendViewTests(TestCase):
@@ -26,8 +26,6 @@ class VendViewTests(TestCase):
             'pin': '12345678901234',
             'voucher_type': 'STD',
             'creator': self.vms_user['username'],
-            'quantity': 10,
-            'value': 5
         })
 
         self.c.post('/login', {'username': 'p@p.com', 'password': '12345'})
@@ -77,9 +75,27 @@ class VendViewTests(TestCase):
         request = self.factory.post('/', {'subscriber_phone_number': '0231802940', 'voucher_value': '5.00'})
         self.process_request(request)
 
-        response = VendView.as_view()(request)
+        response = STDVendView.as_view()(request)
         lst = self.message_list(request)
         self.check_response(response, 'Vend successful.', lst)
+
+    def test_post_instant_voucher(self):
+        voucher = send_api_request(settings.VOUCHER_STUB_INSERT_URL, {
+            'username': 'a@a.com',
+            'password': '12345',
+            'voucher_type': 'INS',
+            'creator': self.vms_user['username'],
+        })
+        request = self.factory.post('/vend/instant', {'subscriber_phone_number': '0231802940', 'voucher_value': '5.00'})
+        self.process_request(request)
+
+        response = INSVendView.as_view()(request)
+        self.assertEqual(response['Content-Type'], 'text/plain')
+
+        send_api_request(settings.VOUCHER_STUB_DELETE_URL, {
+            'voucher_id': voucher['id'],
+            'voucher_type': 'INS'
+        })
 
     def tearDown(self):
         send_api_request(settings.VOUCHER_TEST_USER_DELETE_URL, {
