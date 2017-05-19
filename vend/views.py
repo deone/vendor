@@ -36,7 +36,7 @@ class STDVendView(VendView):
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         if self.request.user.vendor.voucher_type == 'INS':
-            return redirect('/vend/instant')
+            return redirect('vend:instant')
         return super(STDVendView, self).dispatch(*args, **kwargs)
 
 class INSVendView(VendView):

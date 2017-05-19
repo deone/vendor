@@ -17,7 +17,7 @@ class VendViewTests(TestCase):
         self.c = Client()
         self.factory = RequestFactory()
         self.user = User.objects.create_user('p@p.com', 'p@p.com', '12345')
-        self.vendor = Vendor.objects.create(user=self.user, phone_number='0543221234', company_name='Test Co.')
+        self.vendor = Vendor.objects.create(user=self.user, phone_number='0543221234', company_name='Test Co.', voucher_type='STD')
         self.vms_user = send_api_request(settings.VOUCHER_TEST_USER_CREATE_URL, {
             'username': 'z@z.com'
         })
@@ -38,6 +38,19 @@ class VendViewTests(TestCase):
         self.assertTrue('form' in response.context)
         self.assertTemplateUsed(response, 'vend/vend_standard.html')
         self.assertTrue(isinstance(response.context['form'], VendForm))
+
+    def test_get_instant_voucher(self):
+        self.vendor.voucher_type = 'INS'
+        self.vendor.save()
+
+        response = self.c.get('/vend/instant')
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue('form' in response.context)
+        self.assertTemplateUsed(response, 'vend/vend_instant.html')
+        self.assertTrue(isinstance(response.context['form'], VendForm))
+
+        response = self.c.get('/')
+        self.assertEqual(response.status_code, 302)
 
     def process_request(self, request):
         request.user = self.user
