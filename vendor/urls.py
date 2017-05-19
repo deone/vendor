@@ -16,7 +16,7 @@ urlpatterns = [
 urlpatterns += [
     url(r'^$', views.STDVendView.as_view(), name='standard_vend'),
     url(r'^vend/instant$', views.INSVendView.as_view(), name='instant_vend'),
-    url(r'^vends$', views.get_user_vends, name='user_vends'),
+    url(r'^my_vends$', views.get_user_vends, name='user_vends'),
     # Daily Reports
     url(r'^vends$', views.get_vends),
 ]
