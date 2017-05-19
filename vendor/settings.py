@@ -124,8 +124,10 @@ VMS_URL = 'http://vms-deone.c9users.io/vouchers/'
 VOUCHER_GET_URL = VMS_URL + 'get'
 VOUCHER_INVALIDATE_URL = VMS_URL + 'invalidate'
 VOUCHER_VALUES_URL = VMS_URL + 'values/'
-VOUCHER_STUB_INSERT_URL = VMS_URL + 'insert/'
-VOUCHER_STUB_DELETE_URL = VMS_URL + 'delete/'
+VOUCHER_TEST_USER_CREATE_URL = VMS_URL + 'create_test_user'
+VOUCHER_TEST_USER_DELETE_URL = VMS_URL + 'delete_test_user'
+VOUCHER_STUB_INSERT_URL = VMS_URL + 'create_test_voucher'
+VOUCHER_STUB_DELETE_URL = VMS_URL + 'delete_test_voucher'
 VOUCHER_DOWNLOAD_PATH = os.path.join(BASE_DIR, 'downloads')
 
 VENDS_PER_PAGE = 15
