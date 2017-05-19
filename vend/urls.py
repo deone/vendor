@@ -4,8 +4,8 @@ from django.conf import settings
 from . import views
 
 urlpatterns = [
-    url(r'^$', views.VendView.as_view(), name='standard'),
-    url(r'^vend/instant$', views.VendView.as_view(voucher_type='INS', template_name='vend/vend_instant.html'), name='instant'),
+    url(r'^$', views.STDVendView.as_view(), name='standard'),
+    url(r'^vend/instant$', views.INSVendView.as_view(), name='instant'),
 ]
 
 urlpatterns += [

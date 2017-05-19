@@ -20,10 +20,6 @@ class VendView(FormView):
     template_name = 'vend/vend_standard.html'
     voucher_type = 'STD'
 
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super(VendView, self).dispatch(*args, **kwargs)
-
     def get_form_kwargs(self):
         kwargs = super(VendView, self).get_form_kwargs()
         kwargs['voucher_type'] = self.voucher_type
@@ -33,11 +29,27 @@ class VendView(FormView):
 
     def form_valid(self, form):
         response = form.save()
-        if self.voucher_type == 'STD':
-            messages.success(self.request, 'Vend successful.')
-            return redirect('vend:standard')
-        else:
-            return response
+        messages.success(self.request, 'Vend successful.')
+        return redirect('vend:standard')
+
+class STDVendView(VendView):
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        if self.request.user.vendor.voucher_type == 'INS':
+            return redirect('/vend/instant')
+        return super(STDVendView, self).dispatch(*args, **kwargs)
+
+class INSVendView(VendView):
+    form_class = VendForm
+    template_name = 'vend/vend_instant.html'
+    voucher_type = 'INS'
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(INSVendView, self).dispatch(*args, **kwargs)
+
+    def form_valid(self, form):
+        return form.save()
 
 @login_required
 def get_user_vends(request):
