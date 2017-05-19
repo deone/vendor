@@ -20,13 +20,13 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="{% url 'vend:standard' %}">Spectra Wireless Vendor</a>
+          <a class="navbar-brand" href="{% url 'standard_vend' %}">Spectra Wireless Vendor</a>
         </div>
         
         <div class="collapse navbar-collapse" id="vendor-navbar-collapse">
           {% if user.is_authenticated %}
             <ul class="nav navbar-nav">
-              {% block report_link %}<li><a href="{% url 'vend:user_vends' %}">Vends</a></li>{% endblock %}
+              {% block report_link %}<li><a href="{% url 'user_vends' %}">Vends</a></li>{% endblock %}
             </ul>
             <ul class="nav navbar-nav navbar-right">
               <li><a href="{% url 'logout' %}">Logout</a></li>

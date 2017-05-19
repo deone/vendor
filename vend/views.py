@@ -30,13 +30,13 @@ class VendView(FormView):
     def form_valid(self, form):
         response = form.save()
         messages.success(self.request, 'Vend successful.')
-        return redirect('vend:standard')
+        return redirect('standard_vend')
 
 class STDVendView(VendView):
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         if self.request.user.vendor.voucher_type == 'INS':
-            return redirect('vend:instant')
+            return redirect('instant_vend')
         return super(STDVendView, self).dispatch(*args, **kwargs)
 
 class INSVendView(VendView):

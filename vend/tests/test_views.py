@@ -30,7 +30,7 @@ class VendViewTests(TestCase):
             'value': 5
         })
 
-        self.c.post('/accounts/login', {'username': 'p@p.com', 'password': '12345'})
+        self.c.post('/login', {'username': 'p@p.com', 'password': '12345'})
 
     def test_get(self):
         response = self.c.get('/')
