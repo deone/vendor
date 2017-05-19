@@ -1,4 +1,4 @@
-from django.test import TestCase, Client, RequestFactory
+from django.test import SimpleTestCase, TestCase, Client, RequestFactory
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.contrib.sessions.middleware import SessionMiddleware
@@ -12,24 +12,13 @@ from ..views import STDVendView, INSVendView
 from ..helpers import send_api_request, get_price_choices
 
 class VendViewTests(TestCase):
-
     def setUp(self):
         self.c = Client()
-        self.factory = RequestFactory()
         self.user = User.objects.create_user('p@p.com', 'p@p.com', '12345')
         self.vendor = Vendor.objects.create(user=self.user, phone_number='0543221234', company_name='Test Co.', voucher_type='STD')
-        self.vms_user = send_api_request(settings.VOUCHER_TEST_USER_CREATE_URL, {
-            'username': 'z@z.com'
-        })
-
-        self.std_voucher = send_api_request(settings.VOUCHER_STUB_INSERT_URL, {
-            'pin': '12345678901234',
-            'voucher_type': 'STD',
-            'creator': self.vms_user['username'],
-        })
-
         self.c.post('/login', {'username': 'p@p.com', 'password': '12345'})
-
+    
+class VendViewGETTests(VendViewTests):
     def test_get(self):
         response = self.c.get('/')
         self.assertEqual(response.status_code, 200)
@@ -49,6 +38,20 @@ class VendViewTests(TestCase):
 
         response = self.c.get('/')
         self.assertEqual(response.status_code, 302)
+
+class VendViewPOSTTests(VendViewTests):
+    def setUp(self):
+        super(VendViewPOSTTests, self).setUp()
+        self.factory = RequestFactory()
+        self.vms_user = send_api_request(settings.VOUCHER_TEST_USER_CREATE_URL, {
+            'username': 'z@z.com'
+        })
+
+        self.std_voucher = send_api_request(settings.VOUCHER_STUB_INSERT_URL, {
+            'pin': '12345678901234',
+            'voucher_type': 'STD',
+            'creator': self.vms_user['username'],
+        })
 
     def process_request(self, request):
         request.user = self.user
