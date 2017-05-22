@@ -53,7 +53,7 @@ class VendViewPOSTTests(VendViewTests):
             'creator': self.vms_user['username'],
         })
 
-    def process_request(self, request):
+    def _process_request(self, request):
         request.user = self.user
         session = SessionMiddleware()
         session.process_request(request)
@@ -61,14 +61,14 @@ class VendViewPOSTTests(VendViewTests):
         messages = FallbackStorage(request)
         setattr(request, '_messages', messages)
 
-    def message_list(self, request):
+    def _message_list(self, request):
         storage = get_messages(request)
         lst = []
         for message in storage:
             lst.append(message)
         return lst
 
-    def check_response(self, response, message, msg_list):
+    def _check_response(self, response, message, msg_list):
         self.assertEqual(response['Content-Type'], 'text/html; charset=utf-8')
         self.assertEqual(response.status_code, 302)
         self.assertEqual(message, msg_list[0].__str__())
@@ -76,12 +76,12 @@ class VendViewPOSTTests(VendViewTests):
 
     def test_post(self):
         request = self.factory.post('/', {'subscriber_phone_number': '0231802940', 'voucher_value': '5.00'})
-        self.process_request(request)
+        self._process_request(request)
 
         response = STDVendView.as_view()(request)
 
-        lst = self.message_list(request)
-        self.check_response(response, 'Vend successful.', lst)
+        lst = self._message_list(request)
+        self._check_response(response, 'Vend successful.', lst)
 
     def test_post_instant_voucher(self):
         voucher = send_api_request(settings.VOUCHER_STUB_INSERT_URL, {
@@ -91,7 +91,7 @@ class VendViewPOSTTests(VendViewTests):
             'creator': self.vms_user['username'],
         })
         request = self.factory.post('/vend/instant', {'subscriber_phone_number': '', 'voucher_value': '5.00'})
-        self.process_request(request)
+        self._process_request(request)
 
         response = INSVendView.as_view()(request)
 
