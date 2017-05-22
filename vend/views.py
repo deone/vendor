@@ -68,7 +68,7 @@ def get_user_vends(request):
     return render(request, 'vend/vends.html', context)
 
 @ensure_csrf_cookie
-def get_vends(request):
+def get_vendor_vend_count(request):
     # _from and to should be in the 'dd-mm-yyyy' format.
     year = request.GET.get('year', None)
     month = request.GET.get('month', None)
@@ -103,7 +103,4 @@ def get_vends(request):
         
         vendor_list = get_vendor_vends(start=start, end=end, date=None)
 
-    return JsonResponse({
-        'code': 200,
-        'results': {'vendors': vendor_list, 'voucher_values': settings.VOUCHER_VALUES}
-    })
+    return JsonResponse({'vendors': vendor_list, 'voucher_values': settings.VOUCHER_VALUES})
