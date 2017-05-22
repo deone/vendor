@@ -146,7 +146,18 @@ class VendViewPOSTTests(VendViewTests):
         self._check_response(response)
 
     def test_get_vendor_vend_count_year_month_day(self):
-        pass
+        self._create_vend()
+
+        response = self.c.get('/vends?year=' + self._today()['year'] + '&month=' + self._today()['month'] + '&day=' + self._today()['day']).json()
+        self._check_response(response)
+
+    def test_get_vendor_vend_count_from_to(self):
+        self._create_vend()
+
+        date = '%(day)s-%(month)s-%(year)s' % self._today()
+
+        response = self.c.get('/vends?from=' + date + '&to=' + date).json()
+        self._check_response(response)
 
     def tearDown(self):
         send_api_request(settings.VOUCHER_TEST_USER_DELETE_URL, {
