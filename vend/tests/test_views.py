@@ -7,7 +7,7 @@ from django.contrib.messages import get_messages
 from django.conf import settings
 
 from ..forms import VendForm
-from ..models import Vendor
+from ..models import Vendor, Vend
 from ..views import STDVendView, INSVendView
 from ..helpers import send_api_request, get_price_choices
 
@@ -79,6 +79,7 @@ class VendViewPOSTTests(VendViewTests):
         self.process_request(request)
 
         response = STDVendView.as_view()(request)
+
         lst = self.message_list(request)
         self.check_response(response, 'Vend successful.', lst)
 
@@ -89,16 +90,33 @@ class VendViewPOSTTests(VendViewTests):
             'voucher_type': 'INS',
             'creator': self.vms_user['username'],
         })
-        request = self.factory.post('/vend/instant', {'subscriber_phone_number': '0231802940', 'voucher_value': '5.00'})
+        request = self.factory.post('/vend/instant', {'subscriber_phone_number': '', 'voucher_value': '5.00'})
         self.process_request(request)
 
         response = INSVendView.as_view()(request)
+
         self.assertEqual(response['Content-Type'], 'text/plain')
 
         send_api_request(settings.VOUCHER_STUB_DELETE_URL, {
             'voucher_id': voucher['id'],
             'voucher_type': 'INS'
         })
+
+    def test_get_user_vends(self):
+        Vend.objects.create(
+            vendor=self.user.vendor,
+            subscriber_phone_number=None,
+            voucher_id=self.std_voucher['id'],
+            voucher_value=5,
+            voucher_type='sTD'
+            )
+
+        response = self.c.get('/my_vends')
+        self.assertTrue('vends' in response.context)
+
+    def test_get_user_vends_no_vends(self):
+        response = self.c.get('/my_vends')
+        self.assertEqual(response.context['message'], 'No vends found.')
 
     def tearDown(self):
         send_api_request(settings.VOUCHER_TEST_USER_DELETE_URL, {
@@ -109,8 +127,3 @@ class VendViewPOSTTests(VendViewTests):
             'voucher_id': self.std_voucher['id'],
             'voucher_type': 'STD'
         })
-
-class OtherViewsTests(VendViewTests):
-    def test_get_user_vends(self):
-        response = self.c.get('/my_vends')
-        self.assertEqual(response.context['message'], 'No vends found.')
