@@ -11,6 +11,8 @@ from ..models import Vendor, Vend
 from ..views import STDVendView, INSVendView
 from ..helpers import send_api_request, get_price_choices
 
+from datetime import datetime
+
 class VendViewTests(TestCase):
     def setUp(self):
         self.c = Client()
@@ -68,12 +70,6 @@ class VendViewPOSTTests(VendViewTests):
             lst.append(message)
         return lst
 
-    def _check_response(self, response, message, msg_list):
-        self.assertEqual(response['Content-Type'], 'text/html; charset=utf-8')
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(message, msg_list[0].__str__())
-        self.assertEqual(response.get('location'), '/')
-
     def test_post(self):
         request = self.factory.post('/', {'subscriber_phone_number': '0231802940', 'voucher_value': '5.00'})
         self._process_request(request)
@@ -81,7 +77,11 @@ class VendViewPOSTTests(VendViewTests):
         response = STDVendView.as_view()(request)
 
         lst = self._message_list(request)
-        self._check_response(response, 'Vend successful.', lst)
+
+        self.assertEqual(response['Content-Type'], 'text/html; charset=utf-8')
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual('Vend successful.', lst[0].__str__())
+        self.assertEqual(response.get('location'), '/')
 
     def test_post_instant_voucher(self):
         voucher = send_api_request(settings.VOUCHER_STUB_INSERT_URL, {
@@ -94,7 +94,6 @@ class VendViewPOSTTests(VendViewTests):
         self._process_request(request)
 
         response = INSVendView.as_view()(request)
-
         self.assertEqual(response['Content-Type'], 'text/plain')
 
         send_api_request(settings.VOUCHER_STUB_DELETE_URL, {
@@ -102,14 +101,25 @@ class VendViewPOSTTests(VendViewTests):
             'voucher_type': 'INS'
         })
 
-    def test_get_user_vends(self):
-        Vend.objects.create(
+    def _create_vend(self):
+        return Vend.objects.create(
             vendor=self.user.vendor,
-            subscriber_phone_number=None,
+            subscriber_phone_number='0231802940',
             voucher_id=self.std_voucher['id'],
             voucher_value=5,
-            voucher_type='sTD'
+            voucher_type='STD'
             )
+
+    def _today(self):
+        today = datetime.today()
+        return {
+            'year': str(today.year),
+            'month': str(today.month),
+            'day': str(today.day)
+        }
+
+    def test_get_user_vends(self):
+        self._create_vend()
 
         response = self.c.get('/my_vends')
         self.assertTrue('vends' in response.context)
@@ -117,6 +127,26 @@ class VendViewPOSTTests(VendViewTests):
     def test_get_user_vends_no_vends(self):
         response = self.c.get('/my_vends')
         self.assertEqual(response.context['message'], 'No vends found.')
+
+    def _check_response(self, response):
+        self.assertTrue('vendors' in response)
+        self.assertTrue({'count': 1, 'value': 5} in response['vendors'][0]['vend_count'])
+        self.assertTrue('voucher_values' in response)
+
+    def test_get_vendor_vend_count_year(self):
+        self._create_vend()
+
+        response = self.c.get('/vends?year=' + self._today()['year']).json()
+        self._check_response(response)
+
+    def test_get_vendor_vend_count_year_month(self):
+        self._create_vend()
+
+        response = self.c.get('/vends?year=' + self._today()['year'] + '&month=' + self._today()['month']).json()
+        self._check_response(response)
+
+    def test_get_vendor_vend_count_year_month_day(self):
+        pass
 
     def tearDown(self):
         send_api_request(settings.VOUCHER_TEST_USER_DELETE_URL, {

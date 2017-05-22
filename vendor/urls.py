@@ -18,7 +18,7 @@ urlpatterns += [
     url(r'^vend/instant$', views.INSVendView.as_view(), name='instant_vend'),
     url(r'^my_vends$', views.get_user_vends, name='user_vends'),
     # Daily Reports
-    url(r'^vends$', views.get_vends),
+    url(r'^vends$', views.get_vendor_vend_count),
 ]
 
 urlpatterns += [
