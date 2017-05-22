@@ -109,3 +109,8 @@ class VendViewPOSTTests(VendViewTests):
             'voucher_id': self.std_voucher['id'],
             'voucher_type': 'STD'
         })
+
+class OtherViewsTests(VendViewTests):
+    def test_get_user_vends(self):
+        response = self.c.get('/my_vends')
+        self.assertEqual(response.context['message'], 'No vends found.')

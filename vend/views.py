@@ -57,15 +57,13 @@ def get_user_vends(request):
         'voucher_types': settings.VOUCHER_TYPES,
         'voucher_types_map': settings.VOUCHER_TYPES_MAP
     }
-    if request.method == 'POST':
-        pass
+
+    lst = Vend.objects.filter(vendor=request.user.vendor).order_by('-vend_date')
+    if not lst:
+        context.update({'message': 'No vends found.'})
     else:
-        lst = Vend.objects.filter(vendor=request.user.vendor).order_by('-vend_date')
-        if lst == []:
-            context.update({'message': 'No vends found.'})
-        else:
-            vends = paginate(request, lst)
-            context.update({'vends': vends})
+        vends = paginate(request, lst)
+        context.update({'vends': vends})
         
     return render(request, 'vend/vends.html', context)
 
