@@ -49,7 +49,7 @@ class VendViewPOSTTests(VendViewTests):
 
         self.vms = VMS()
         self.vms_user = self.vms.create_vms_user()
-        self.std_voucher = self.vms.create_std_voucher(self.vms_user)
+        self.std_voucher = self.vms.create_voucher(self.vms_user, pin='1234567891234')
 
     def _process_request(self, request):
         request.user = self.user

@@ -11,12 +11,22 @@ class VMS(object):
             'username': 'z@z.com'
         })
     
-    def create_std_voucher(self, vms_user):
-        return send_api_request(settings.VOUCHER_STUB_INSERT_URL, {
-            'pin': '12345678901234',
-            'voucher_type': 'STD',
+    def create_voucher(self, vms_user, voucher_type='STD', pin=None, username=None, password=None):
+        dct = {
+            'voucher_type': voucher_type,
             'creator': vms_user['username'],
-        })
+        }
+
+        if voucher_type == 'STD':
+            dct.update({
+                'pin': pin,
+            })
+        else:
+            dct.update({
+                'username': username, 'password': password
+            })
+
+        return send_api_request(settings.VOUCHER_STUB_INSERT_URL, dct)
 
     def delete_vms_user(self, vms_user):
         return send_api_request(settings.VOUCHER_TEST_USER_DELETE_URL, {
