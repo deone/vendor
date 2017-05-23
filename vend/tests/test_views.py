@@ -11,7 +11,7 @@ from ..models import Vend
 from ..views import STDVendView, INSVendView
 from ..helpers import send_api_request, get_price_choices
 
-from . import Tests
+from . import Tests, VMS
 
 from datetime import datetime
 
@@ -46,15 +46,10 @@ class VendViewPOSTTests(VendViewTests):
     def setUp(self):
         super(VendViewPOSTTests, self).setUp()
         self.factory = RequestFactory()
-        self.vms_user = send_api_request(settings.VOUCHER_TEST_USER_CREATE_URL, {
-            'username': 'z@z.com'
-        })
 
-        self.std_voucher = send_api_request(settings.VOUCHER_STUB_INSERT_URL, {
-            'pin': '12345678901234',
-            'voucher_type': 'STD',
-            'creator': self.vms_user['username'],
-        })
+        self.vms = VMS()
+        self.vms_user = self.vms.create_vms_user()
+        self.std_voucher = self.vms.create_std_voucher(self.vms_user)
 
     def _process_request(self, request):
         request.user = self.user
@@ -109,7 +104,7 @@ class VendViewPOSTTests(VendViewTests):
             voucher_id=self.std_voucher['id'],
             voucher_value=5,
             voucher_type='STD'
-            )
+        )
 
     def _today(self):
         today = datetime.today()
@@ -161,11 +156,5 @@ class VendViewPOSTTests(VendViewTests):
         self._check_response(response)
 
     def tearDown(self):
-        send_api_request(settings.VOUCHER_TEST_USER_DELETE_URL, {
-            'username': self.vms_user['username']
-        })
-
-        send_api_request(settings.VOUCHER_STUB_DELETE_URL, {
-            'voucher_id': self.std_voucher['id'],
-            'voucher_type': 'STD'
-        })
+        self.vms.delete_vms_user(self.vms_user)
+        self.vms.delete_std_voucher(self.std_voucher)
