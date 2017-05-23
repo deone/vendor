@@ -1,23 +1,24 @@
 from django.test import SimpleTestCase, TestCase, Client, RequestFactory
 from django.core.urlresolvers import reverse
-from django.contrib.auth.models import User
+
 from django.contrib.sessions.middleware import SessionMiddleware
 from django.contrib.messages.storage.fallback import FallbackStorage
 from django.contrib.messages import get_messages
 from django.conf import settings
 
 from ..forms import VendForm
-from ..models import Vendor, Vend
+from ..models import Vend
 from ..views import STDVendView, INSVendView
 from ..helpers import send_api_request, get_price_choices
 
+from . import Tests
+
 from datetime import datetime
 
-class VendViewTests(TestCase):
+class VendViewTests(Tests):
     def setUp(self):
         self.c = Client()
-        self.user = User.objects.create_user('p@p.com', 'p@p.com', '12345')
-        self.vendor = Vendor.objects.create(user=self.user, phone_number='0543221234', company_name='Test Co.', voucher_type='STD')
+        super(VendViewTests, self).setUp()
         self.c.post('/login', {'username': 'p@p.com', 'password': '12345'})
     
 class VendViewGETTests(VendViewTests):
