@@ -10,7 +10,12 @@ class VMS(object):
         return send_api_request(settings.VOUCHER_TEST_USER_CREATE_URL, {
             'username': 'z@z.com'
         })
-    
+
+    def delete_vms_user(self, vms_user):
+        return send_api_request(settings.VOUCHER_TEST_USER_DELETE_URL, {
+            'username': vms_user['username']
+        })
+
     def create_voucher(self, vms_user, voucher_type='STD', pin=None, username=None, password=None):
         dct = {
             'voucher_type': voucher_type,
@@ -18,25 +23,16 @@ class VMS(object):
         }
 
         if voucher_type == 'STD':
-            dct.update({
-                'pin': pin,
-            })
+            dct.update({'pin': pin})
         else:
-            dct.update({
-                'username': username, 'password': password
-            })
+            dct.update({'username': username, 'password': password})
 
         return send_api_request(settings.VOUCHER_STUB_INSERT_URL, dct)
 
-    def delete_vms_user(self, vms_user):
-        return send_api_request(settings.VOUCHER_TEST_USER_DELETE_URL, {
-            'username': vms_user['username']
-        })
-
-    def delete_std_voucher(self, voucher):
+    def delete_voucher(self, voucher_id, voucher_type):
         return send_api_request(settings.VOUCHER_STUB_DELETE_URL, {
-            'voucher_id': voucher['id'],
-            'voucher_type': 'STD'
+            'voucher_id': voucher_id,
+            'voucher_type': voucher_type
         })
 
 class Tests(TestCase):

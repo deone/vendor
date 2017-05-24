@@ -87,10 +87,7 @@ class VendViewPOSTTests(VendViewTests):
         response = INSVendView.as_view()(request)
         self.assertEqual(response['Content-Type'], 'text/plain')
 
-        send_api_request(settings.VOUCHER_STUB_DELETE_URL, {
-            'voucher_id': voucher['id'],
-            'voucher_type': 'INS'
-        })
+        self.vms.delete_voucher(voucher['id'], 'INS')
 
     def _create_vend(self):
         return Vend.objects.create(
@@ -152,4 +149,4 @@ class VendViewPOSTTests(VendViewTests):
 
     def tearDown(self):
         self.vms.delete_vms_user(self.vms_user)
-        self.vms.delete_std_voucher(self.std_voucher)
+        self.vms.delete_voucher(self.std_voucher['id'], 'STD')

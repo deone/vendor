@@ -25,4 +25,4 @@ class VendFormTest(Tests):
 
     def tearDown(self):
         self.vms.delete_vms_user(self.vms_user)
-        self.vms.delete_std_voucher(self.std_voucher)
+        self.vms.delete_voucher(self.std_voucher['id'], 'STD')
