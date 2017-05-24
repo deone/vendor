@@ -46,6 +46,10 @@ class VendViewPOSTTests(VendViewTests):
     def setUp(self):
         super(VendViewPOSTTests, self).setUp()
         self.factory = RequestFactory()
+        self.account = send_api_request(settings.ACCOUNT_CREATE_URL, {
+            'username': '0231802941',
+            'password': '12345'
+        })
 
         self.vms = VMS()
         self.vms_user = self.vms.create_vms_user()
@@ -67,7 +71,7 @@ class VendViewPOSTTests(VendViewTests):
         return lst
 
     def test_post(self):
-        request = self.factory.post('/', {'subscriber_phone_number': '0231802940', 'voucher_value': '5.00'})
+        request = self.factory.post('/', {'subscriber_phone_number': self.account['username'], 'voucher_value': '5.00'})
         self._process_request(request)
 
         response = STDVendView.as_view()(request)
@@ -121,6 +125,9 @@ class VendViewPOSTTests(VendViewTests):
         self.assertTrue({'count': 1, 'value': 5} in response['vendors'][0]['vend_count'])
         self.assertTrue('voucher_values' in response)
 
+    def _build_query_string(self, kwargs):
+        pass
+
     def test_get_vendor_vend_count_year(self):
         self._create_vend()
 
@@ -148,5 +155,8 @@ class VendViewPOSTTests(VendViewTests):
         self._check_response(response)
 
     def tearDown(self):
+        send_api_request(settings.ACCOUNT_DELETE_URL, {
+            'username': self.account['username']
+        })
         self.vms.delete_vms_user(self.vms_user)
         self.vms.delete_voucher(self.std_voucher['id'], 'STD')
