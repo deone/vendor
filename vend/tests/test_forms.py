@@ -11,7 +11,7 @@ class VendFormTest(Tests):
         super(VendFormTest, self).setUp()
         self.vms = VMS()
         self.voucher_type = 'STD'
-        self.vms_user = self.vms.create_vms_user()
+        self.vms_user = self.vms.create_user()
         self.std_voucher = self.vms.create_voucher(self.vms_user, pin='1234567891234')
 
     def test_clean_account_not_found(self):
@@ -33,5 +33,5 @@ class VendFormTest(Tests):
         self.assertEqual(form.errors['__all__'][0], 'Provide a valid phone number.')
 
     def tearDown(self):
-        self.vms.delete_vms_user(self.vms_user)
+        self.vms.delete_user(self.vms_user)
         self.vms.delete_voucher(self.std_voucher['id'], 'STD')

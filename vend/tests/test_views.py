@@ -11,7 +11,7 @@ from ..models import Vend
 from ..views import STDVendView, INSVendView
 from ..helpers import send_api_request, get_price_choices
 
-from . import Tests, VMS
+from . import Tests, VMS, create_vend
 
 from datetime import datetime
 
@@ -52,7 +52,7 @@ class VendViewPOSTTests(VendViewTests):
         })
 
         self.vms = VMS()
-        self.vms_user = self.vms.create_vms_user()
+        self.vms_user = self.vms.create_user()
         self.std_voucher = self.vms.create_voucher(self.vms_user, pin='1234567891234')
 
     def _process_request(self, request):
@@ -93,15 +93,6 @@ class VendViewPOSTTests(VendViewTests):
 
         self.vms.delete_voucher(voucher['id'], 'INS')
 
-    def _create_vend(self):
-        return Vend.objects.create(
-            vendor=self.user.vendor,
-            subscriber_phone_number='0231802940',
-            voucher_id=self.std_voucher['id'],
-            voucher_value=5,
-            voucher_type='STD'
-        )
-
     def _today(self):
         today = datetime.today()
         return {
@@ -111,7 +102,7 @@ class VendViewPOSTTests(VendViewTests):
         }
 
     def test_get_user_vends(self):
-        self._create_vend()
+        create_vend(self.user.vendor, self.std_voucher)
 
         response = self.c.get('/my_vends')
         self.assertTrue('vends' in response.context)
@@ -135,28 +126,28 @@ class VendViewPOSTTests(VendViewTests):
         return string[:-1]
 
     def test_get_vendor_vend_count_year(self):
-        self._create_vend()
+        create_vend(self.user.vendor, self.std_voucher)
         query_string = self._build_query_string(year=self._today()['year'])
 
         response = self.c.get(query_string).json()
         self._check_response(response)
 
     def test_get_vendor_vend_count_year_month(self):
-        self._create_vend()
+        create_vend(self.user.vendor, self.std_voucher)
         query_string = self._build_query_string(year=self._today()['year'], month=self._today()['month'])
 
         response = self.c.get(query_string).json()
         self._check_response(response)
 
     def test_get_vendor_vend_count_year_month_day(self):
-        self._create_vend()
+        create_vend(self.user.vendor, self.std_voucher)
         query_string = self._build_query_string(year=self._today()['year'], month=self._today()['month'], day=self._today()['day'])
 
         response = self.c.get(query_string).json()
         self._check_response(response)
 
     def test_get_vendor_vend_count_from_to(self):
-        self._create_vend()
+        create_vend(self.user.vendor, self.std_voucher)
         date = '%(day)s-%(month)s-%(year)s' % self._today()
         query_string = self._build_query_string(from_=date, to=date)
 
@@ -167,5 +158,5 @@ class VendViewPOSTTests(VendViewTests):
         send_api_request(settings.ACCOUNT_DELETE_URL, {
             'username': self.account['username']
         })
-        self.vms.delete_vms_user(self.vms_user)
+        self.vms.delete_user(self.vms_user)
         self.vms.delete_voucher(self.std_voucher['id'], 'STD')

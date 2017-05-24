@@ -3,17 +3,17 @@ from django.conf import settings
 from django.contrib.auth.models import User
 
 from ..helpers import send_api_request
-from ..models import Vendor
+from ..models import Vendor, Vend
 
 class VMS(object):
-    def create_vms_user(self):
+    def create_user(self):
         return send_api_request(settings.VOUCHER_TEST_USER_CREATE_URL, {
             'username': 'z@z.com'
         })
 
-    def delete_vms_user(self, vms_user):
+    def delete_user(self, user):
         return send_api_request(settings.VOUCHER_TEST_USER_DELETE_URL, {
-            'username': vms_user['username']
+            'username': user['username']
         })
 
     def create_voucher(self, vms_user, voucher_type='STD', pin=None, username=None, password=None):
@@ -35,7 +35,28 @@ class VMS(object):
             'voucher_type': voucher_type
         })
 
+def create_user():
+    user = User.objects.create_user('p@p.com', 'p@p.com', '12345')
+    user.first_name = 'Dayo'
+    user.last_name = 'Osikoya'
+    return user
+
+def create_vendor(user):
+    return Vendor.objects.create(user=user, phone_number='0543221234', company_name='Test Co.', voucher_type='STD')
+
+def create_vend(vendor, voucher):
+    return Vend.objects.create(
+        vendor=vendor,
+        subscriber_phone_number='0231802940',
+        voucher_id=voucher['id'],
+        voucher_value=5,
+        voucher_type='STD'
+    )
+
 class Tests(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user('p@p.com', 'p@p.com', '12345')
-        self.vendor = Vendor.objects.create(user=self.user, phone_number='0543221234', company_name='Test Co.', voucher_type='STD')
+        self.user = create_user()
+        self.vendor = create_vendor(self.user)
+
+    def tearDown(self):
+        self.user.delete()
