@@ -80,12 +80,7 @@ class VendViewPOSTTests(VendViewTests):
         self.assertEqual(response.get('location'), '/')
 
     def test_post_instant_voucher(self):
-        voucher = send_api_request(settings.VOUCHER_STUB_INSERT_URL, {
-            'username': 'a@a.com',
-            'password': '12345',
-            'voucher_type': 'INS',
-            'creator': self.vms_user['username'],
-        })
+        voucher = self.vms.create_voucher(self.vms_user, voucher_type='INS', username='a@a.com', password='12345')
         request = self.factory.post('/vend/instant', {'subscriber_phone_number': '', 'voucher_value': '5.00'})
         self._process_request(request)
 
