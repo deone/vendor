@@ -138,8 +138,8 @@ VENDS_PER_PAGE = 15
 BILLING_URL = 'http://billing-deone.c9users.io/'
 ACCOUNT_GET_URL = BILLING_URL + 'accounts/get'
 ACCOUNT_RECHARGE_URL = BILLING_URL + 'accounts/recharge'
-ACCOUNT_CREATE_URL = BILLING_URL + 'accounts/create_test_user'
-ACCOUNT_DELETE_URL = BILLING_URL + 'accounts/delete_test_user'
+ACCOUNT_CREATE_URL = BILLING_URL + 'accounts/create_test_account'
+ACCOUNT_DELETE_URL = BILLING_URL + 'accounts/delete_test_account'
 
 # SMS settings - SMSGH
 SMS_URL = 'https://api.smsgh.com/v3/messages/send'
