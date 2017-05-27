@@ -1,7 +1,7 @@
 from django.forms import ValidationError
 from django.contrib.auth.models import User
 
-from ..helpers import get_price_choices
+from utils import get_price_choices
 from ..forms import VendForm
 
 from . import Tests, VMS
