@@ -2,19 +2,19 @@ from django.test import TestCase
 from django.conf import settings
 from django.contrib.auth.models import User
 
-from ..helpers import send_api_request
+from utils import send_api_request
 from ..models import Vendor, Vend
 
 class VMS(object):
     def create_user(self):
         return send_api_request(settings.VOUCHER_TEST_USER_CREATE_URL, {
             'username': 'z@z.com'
-        })
+        }).json()
 
     def delete_user(self, user):
         return send_api_request(settings.VOUCHER_TEST_USER_DELETE_URL, {
             'username': user['username']
-        })
+        }).json()
 
     def create_voucher(self, vms_user, voucher_type='STD', pin=None, username=None, password=None):
         dct = {
@@ -27,13 +27,13 @@ class VMS(object):
         else:
             dct.update({'username': username, 'password': password})
 
-        return send_api_request(settings.VOUCHER_STUB_INSERT_URL, dct)
+        return send_api_request(settings.VOUCHER_STUB_INSERT_URL, dct).json()
 
     def delete_voucher(self, voucher_id, voucher_type):
         return send_api_request(settings.VOUCHER_STUB_DELETE_URL, {
             'voucher_id': voucher_id,
             'voucher_type': voucher_type
-        })
+        }).json()
 
 def create_user():
     user = User.objects.create_user('p@p.com', 'p@p.com', '12345')

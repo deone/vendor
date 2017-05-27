@@ -11,7 +11,7 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from .forms import VendForm
 from .models import Vend, Vendor
 
-from utils import write_vouchers, get_price_choices, paginate, get_vendor_vends
+from utils import get_price_choices, paginate, get_vendor_vends
 
 import datetime
 

@@ -9,7 +9,7 @@ from django.conf import settings
 from ..forms import VendForm
 from ..models import Vend
 from ..views import STDVendView, INSVendView
-from ..helpers import send_api_request, get_price_choices
+from utils import send_api_request, get_price_choices
 
 from . import Tests, VMS, create_vend
 
@@ -49,7 +49,7 @@ class VendViewPOSTTests(VendViewTests):
         self.account = send_api_request(settings.ACCOUNT_CREATE_URL, {
             'username': '0231802941',
             'password': '12345'
-        })
+        }).json()
 
         self.vms = VMS()
         self.vms_user = self.vms.create_user()
@@ -69,6 +69,28 @@ class VendViewPOSTTests(VendViewTests):
         for message in storage:
             lst.append(message)
         return lst
+
+    def _today(self):
+        today = datetime.today()
+        return {
+            'year': str(today.year),
+            'month': str(today.month),
+            'day': str(today.day)
+        }
+
+    def _check_response(self, response):
+        self.assertTrue('vendors' in response)
+        self.assertTrue({'count': 1, 'value': 5} in response['vendors'][0]['vend_count'])
+        self.assertTrue('voucher_values' in response)
+
+    def _build_query_string(self, **kwargs):
+        string = '/vends?'
+        for item in kwargs.iteritems():
+            item = list(item)
+            if item[0] == 'from_':
+                item[0] = 'from'
+            string += ('%s%s%s%s') % (item[0], '=', item[1], '&')
+        return string[:-1]
 
     def test_post(self):
         request = self.factory.post('/', {'subscriber_phone_number': self.account['username'], 'voucher_value': '5.00'})
@@ -93,14 +115,6 @@ class VendViewPOSTTests(VendViewTests):
 
         self.vms.delete_voucher(voucher['id'], 'INS')
 
-    def _today(self):
-        today = datetime.today()
-        return {
-            'year': str(today.year),
-            'month': str(today.month),
-            'day': str(today.day)
-        }
-
     def test_get_user_vends(self):
         create_vend(self.user.vendor, self.std_voucher)
 
@@ -110,20 +124,6 @@ class VendViewPOSTTests(VendViewTests):
     def test_get_user_vends_no_vends(self):
         response = self.c.get('/my_vends')
         self.assertEqual(response.context['message'], 'No vends found.')
-
-    def _check_response(self, response):
-        self.assertTrue('vendors' in response)
-        self.assertTrue({'count': 1, 'value': 5} in response['vendors'][0]['vend_count'])
-        self.assertTrue('voucher_values' in response)
-
-    def _build_query_string(self, **kwargs):
-        string = '/vends?'
-        for item in kwargs.iteritems():
-            item = list(item)
-            if item[0] == 'from_':
-                item[0] = 'from'
-            string += ('%s%s%s%s') % (item[0], '=', item[1], '&')
-        return string[:-1]
 
     def test_get_vendor_vend_count_year(self):
         create_vend(self.user.vendor, self.std_voucher)

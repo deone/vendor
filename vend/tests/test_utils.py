@@ -1,9 +1,9 @@
 from django.test import SimpleTestCase
 from django.conf import settings
 
-from ..helpers import write_vouchers
+from utils import write_vouchers
 
-class HelpersTests(SimpleTestCase):
+class UtilsTests(SimpleTestCase):
 
     def test_write_vouchers(self):
         vouchers = [['0000000375', 'aaa@a.com', '12345'], ['0000000376', 'bbb@a.com', '12345']]
