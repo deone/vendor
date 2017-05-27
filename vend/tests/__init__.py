@@ -5,16 +5,14 @@ from django.contrib.auth.models import User
 from utils import send_api_request
 from ..models import Vendor, Vend
 
+import requests
+
 class VMS(object):
     def create_user(self):
-        return send_api_request(settings.VOUCHER_TEST_USER_CREATE_URL, {
-            'username': 'z@z.com'
-        }).json()
+        return requests.post(settings.VOUCHER_TEST_USER_CREATE_URL, data={'username': 'z@z.com'}).json()
 
     def delete_user(self, user):
-        return send_api_request(settings.VOUCHER_TEST_USER_DELETE_URL, {
-            'username': user['username']
-        }).json()
+        return requests.post(settings.VOUCHER_TEST_USER_DELETE_URL, data={'username': user['username']}).json()
 
     def create_voucher(self, vms_user, voucher_type='STD', pin=None, username=None, password=None):
         dct = {
@@ -27,10 +25,10 @@ class VMS(object):
         else:
             dct.update({'username': username, 'password': password})
 
-        return send_api_request(settings.VOUCHER_STUB_INSERT_URL, dct).json()
+        return requests.post(settings.VOUCHER_STUB_INSERT_URL, data=dct).json()
 
     def delete_voucher(self, voucher_id, voucher_type):
-        return send_api_request(settings.VOUCHER_STUB_DELETE_URL, {
+        return requests.post(settings.VOUCHER_STUB_DELETE_URL, data={
             'voucher_id': voucher_id,
             'voucher_type': voucher_type
         }).json()

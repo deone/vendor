@@ -39,7 +39,7 @@ class VendForm(forms.ModelForm):
         cleaned_data = super(VendForm, self).clean()
 
         # Get voucher
-        voucher = self.get_info_or_display_error(settings.VOUCHER_GET_URL, {
+        voucher = self.get_data_or_display_error(settings.VOUCHER_GET_URL, {
             'voucher_type': self.voucher_type,
             'value': cleaned_data.get('voucher_value')
         })
