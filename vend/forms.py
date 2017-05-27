@@ -8,6 +8,8 @@ from utils import send_api_request, file_generator, write_vouchers
 
 from .models import Vend
 
+import requests
+
 class VendForm(forms.ModelForm):
     class Meta:
         model = Vend
@@ -60,13 +62,22 @@ class VendForm(forms.ModelForm):
             })
 
         # Invalidate voucher
-        response = self.get_info_or_display_error(settings.VOUCHER_INVALIDATE_URL, {
+        response = self.get_data_or_display_error(settings.VOUCHER_INVALIDATE_URL, {
             'voucher_id': voucher['serial_no'],
             'vendor_id': self.vendor.pk,
             'voucher_type': self.voucher_type
         })
 
         cleaned_data.update({'voucher': voucher})
+
+    def get_data_or_display_error(self, url, data):
+        r = requests.post(url, data=data)
+        json = r.json()
+
+        if r.status_code != 200:
+            raise forms.ValidationError(_(json['message']), code=_(json['code']))
+
+        return json
 
     def get_info_or_display_error(self, url, data):
         r = send_api_request(url, data)

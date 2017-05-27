@@ -17,7 +17,7 @@ class VendFormTest(Tests):
     def test_clean_account_not_found(self):
         prices = get_price_choices(self.voucher_type)
 
-        data = {'subscriber_phone_number': '0231802942', 'voucher_value': '5.00'}
+        data = {'subscriber_phone_number': '0231802942', 'voucher_value': '5.0'}
         form = VendForm(data, user=self.user, prices=prices, voucher_type=self.voucher_type)
 
         self.assertFalse(form.is_valid())
@@ -26,7 +26,7 @@ class VendFormTest(Tests):
     def test_clean_invalid_phone_number(self):
         prices = get_price_choices(self.voucher_type)
 
-        data = {'subscriber_phone_number': '0001234567', 'voucher_value': '5.00'}
+        data = {'subscriber_phone_number': '0001234567', 'voucher_value': '5.0'}
         form = VendForm(data, user=self.user, prices=prices, voucher_type=self.voucher_type)
 
         self.assertFalse(form.is_valid())

@@ -93,7 +93,7 @@ class VendViewPOSTTests(VendViewTests):
         return string[:-1]
 
     def test_post(self):
-        request = self.factory.post('/', {'subscriber_phone_number': self.account['username'], 'voucher_value': '5.00'})
+        request = self.factory.post('/', {'subscriber_phone_number': self.account['username'], 'voucher_value': '5.0'})
         self._process_request(request)
 
         response = STDVendView.as_view()(request)
@@ -107,7 +107,7 @@ class VendViewPOSTTests(VendViewTests):
 
     def test_post_instant_voucher(self):
         voucher = self.vms.create_voucher(self.vms_user, voucher_type='INS', username='a@a.com', password='12345')
-        request = self.factory.post('/vend/instant', {'subscriber_phone_number': '', 'voucher_value': '5.00'})
+        request = self.factory.post('/vend/instant', {'subscriber_phone_number': '', 'voucher_value': '5.0'})
         self._process_request(request)
 
         response = INSVendView.as_view()(request)
