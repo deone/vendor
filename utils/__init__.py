@@ -31,17 +31,6 @@ def write_vouchers(voucher_list, _file):
 
     return f
 
-def send_api_request(url, data):
-    get_response = requests.get(url)
-    post_response = requests.post(
-          url,
-          data=data,
-          headers={"X-CSRFToken": get_response.cookies['csrftoken']},
-          cookies=get_response.cookies
-        )
-
-    return post_response
-
 def paginate(request, lst):
     paginator = Paginator(lst, settings.VENDS_PER_PAGE)
     page = request.GET.get('page')

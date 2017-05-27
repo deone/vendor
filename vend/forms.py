@@ -4,7 +4,7 @@ from django.utils import timezone
 from django.http import HttpResponse
 from django.utils.translation import ugettext as _
 
-from utils import send_api_request, file_generator, write_vouchers
+from utils import file_generator, write_vouchers
 
 from .models import Vend
 
@@ -50,12 +50,12 @@ class VendForm(forms.ModelForm):
                 raise forms.ValidationError('Provide a valid phone number.', code='number_invalid')
 
             # Get account
-            account = self.get_info_or_display_error(settings.ACCOUNT_GET_URL, {
+            account = self.get_data_or_display_error(settings.ACCOUNT_GET_URL, {
                 'phone_number': cleaned_data.get('subscriber_phone_number')
             })
     
             # Recharge account
-            recharge = self.get_info_or_display_error(settings.ACCOUNT_RECHARGE_URL, {
+            recharge = self.get_data_or_display_error(settings.ACCOUNT_RECHARGE_URL, {
                 'username': account['username'],
                 'amount': cleaned_data.get('voucher_value'),
                 'serial_no': voucher['serial_no']
@@ -72,15 +72,6 @@ class VendForm(forms.ModelForm):
 
     def get_data_or_display_error(self, url, data):
         r = requests.post(url, data=data)
-        json = r.json()
-
-        if r.status_code != 200:
-            raise forms.ValidationError(_(json['message']), code=_(json['code']))
-
-        return json
-
-    def get_info_or_display_error(self, url, data):
-        r = send_api_request(url, data)
         json = r.json()
 
         if r.status_code != 200:

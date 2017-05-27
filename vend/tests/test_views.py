@@ -9,10 +9,11 @@ from django.conf import settings
 from ..forms import VendForm
 from ..models import Vend
 from ..views import STDVendView, INSVendView
-from utils import send_api_request, get_price_choices
+from utils import get_price_choices
 
 from . import Tests, VMS, create_vend
 
+import requests
 from datetime import datetime
 
 class VendViewTests(Tests):
@@ -46,7 +47,7 @@ class VendViewPOSTTests(VendViewTests):
     def setUp(self):
         super(VendViewPOSTTests, self).setUp()
         self.factory = RequestFactory()
-        self.account = send_api_request(settings.ACCOUNT_CREATE_URL, {
+        self.account = requests.post(settings.ACCOUNT_CREATE_URL, data={
             'username': '0231802941',
             'password': '12345'
         }).json()
@@ -155,7 +156,7 @@ class VendViewPOSTTests(VendViewTests):
         self._check_response(response)
 
     def tearDown(self):
-        send_api_request(settings.ACCOUNT_DELETE_URL, {
+        requests.post(settings.ACCOUNT_DELETE_URL, data={
             'username': self.account['username']
         })
         self.vms.delete_user(self.vms_user)
