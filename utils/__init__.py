@@ -14,8 +14,8 @@ def get_price_choices(voucher_type):
     lst = [('', 'Select Price')]
 
     prices = requests.get(settings.VOUCHER_VALUES_URL, params={'voucher_type': voucher_type}).json()
-    for p in prices['results']:
-        lst.append((p, str(p) + ' GHS'))
+    for p in prices:
+        lst.append((str(p), str(p) + ' GHS'))
 
     return lst
 
