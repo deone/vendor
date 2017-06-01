@@ -3,7 +3,7 @@ from settings import *
 DEBUG = False
 
 # VMS settings
-VMS_URL = 'http://154.117.12.5/vouchers/'
+VMS_URL = 'http://154.117.8.18:8090/vouchers/'
 VOUCHER_GET_URL = VMS_URL + 'get'
 VOUCHER_INVALIDATE_URL = VMS_URL + 'invalidate'
 VOUCHER_VALUES_URL = VMS_URL + 'values'
