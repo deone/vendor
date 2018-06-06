@@ -144,9 +144,9 @@ ACCOUNT_DELETE_URL = BILLING_URL + 'accounts/delete_test_account'
 # SMS settings - SMSGH
 SMS_URL = 'https://api.smsgh.com/v3/messages/send'
 SMS_PARAMS = {
-    'From': 'XWF',
-    'ClientId': 'qtrufcsm',
-    'ClientSecret': 'mgzqaxfe',
+    'From': 'Vendor',
+    'ClientId': 'keadfnlm',
+    'ClientSecret': 'nkkzccyd',
     'RegisteredDelivery': 'true'
 }
 
