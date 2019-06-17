@@ -1,4 +1,4 @@
-from django.test import SimpleTestCase, TestCase, Client, RequestFactory
+from django.test import TestCase, Client, RequestFactory
 from django.core.urlresolvers import reverse
 
 from django.contrib.sessions.middleware import SessionMiddleware
